@@ -1,4 +1,16 @@
-# PokéSurvivor · Mundo Misterioso
+# 宝可梦幸存者 · 简体中文单机修改版
+
+本项目基于 **[JPTER78](https://github.com/JPTER78)** 创作的 **[PokéSurvivor](https://github.com/JPTER78/pokesurvivor)**。原游戏设计、核心代码和原有功能来自原项目；本仓库由 [Grrreymane](https://github.com/Grrreymane) 维护中文与本地单机适配，并非原作者官方中文版。
+
+本仓库的修改包括：简体中文界面与宝可梦名称、本地自动存档、移除登录流程、暂时隐藏在线社交与排行，以及替换绿宝石背景音乐。音乐来源另见 [素材说明](assets/music/README.txt)。
+
+保留原项目提交历史、[代码许可证](LICENSE)和[素材署名](CREDITS.md)。完整中文说明见 [README.zh-CN.md](README.zh-CN.md)。
+
+---
+
+以下为保留的原项目说明。
+
+## PokéSurvivor · Mundo Misterioso
 
 > **简体中文本地版：** 双击 `启动中文版.cmd`，或执行 `npm start` 后打开 http://127.0.0.1:4173/ 。使用说明见 [README.zh-CN.md](README.zh-CN.md)。以下保留原项目说明。
 
