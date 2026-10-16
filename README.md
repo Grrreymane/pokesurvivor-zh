@@ -1,5 +1,7 @@
 # PokéSurvivor · Mundo Misterioso
 
+> **简体中文本地版：** 双击 `启动中文版.cmd`，或执行 `npm start` 后打开 http://127.0.0.1:4173/ 。使用说明见 [README.zh-CN.md](README.zh-CN.md)。以下保留原项目说明。
+
 Bullet-heaven con Pokémon al estilo de Survivor.io y Megabonk, con sprites de
 *Pokémon Mundo Misterioso*, capa roguelike, **966 Pokémon de las 9 generaciones**,
 shinies y gacha por región. Música y efectos compuestos para el juego.

@@ -87,6 +87,19 @@ G.RankingUI = (() => {
     const b = G.Ranking.board(mode, period, dex), done = G.Ranking.reported();
     rows.forEach((r, i) => list.appendChild(rowEl(r, i + 1, r.uids.includes(uid), b, done)));
 
+    // 中文直接组合周期、模式与宝可梦，避免相邻占位符错误拆分西班牙语短语。
+    if (G.I18n.lang === 'zh-CN') {
+      const periodName = { d: '今日', w: '本周', m: '本月', y: '今年', a: '历史' }[period];
+      const modeName = mode === 's' ? '单人' : '组队';
+      const pokemonName = dex ? ' · ' + esc(G.T(G.DEX_BY[dex].name)) : '';
+      const context = `${periodName} · ${modeName}${pokemonName}`;
+      $('rk-me').innerHTML = !G.Social.me ? '在好友页面设置昵称后，即可参与排行榜。'
+        : me && me.out ? `你尚未进入前 50 名（${context}）。可在总榜查看准确排名。`
+        : me ? `你的最佳排名（${context}）：<b class="gold">#${me.pos}</b> · ${fmt(me.t)}`
+        : `暂无你的纪录（${context}）。`;
+      return;
+    }
+
     // La frase se monta en cada idioma (traducirla por trozos sale rara).
     const en = G.I18n.lang === 'en';
     const pn = en ? { d: 'today', w: 'this week', m: 'this month', y: 'this year', a: 'of all time' }[period]

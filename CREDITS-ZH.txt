@@ -1,0 +1,19 @@
+宝可梦幸存者 · 中文本地修改版
+
+原项目：PokéSurvivor，作者 JPTER78
+https://github.com/JPTER78/pokesurvivor
+基础版本：5bbc3b29288d6af4596f21188fb8b54e0e9b739f
+修改：简体中文词典、宝可梦中文名称、字体适配、本地快捷存档、中文指南及启动/构建工具。
+
+代码许可：LICENSE / LICENSE-NONCOMMERCIAL.md（PolyForm Noncommercial 1.0.0）。
+精灵：PMD SpriteCollab，CC BY-NC 4.0；逐一艺术家署名完整保留于 CREDITS.md。
+字体：Pixelify Sans，保留 assets/fonts 下的原字体与许可。
+背景音乐：《宝可梦 红宝石／蓝宝石／绿宝石》原作曲目的预循环 OGG 版本，
+由 ENLS’s Pre-Looped Music Library 整理；来源、曲目及权利说明见 assets/music/README.txt。
+背景音乐保留其原有权利，不属于原游戏代码或精灵素材的授权范围。
+音效及音频文件加载失败时的合成配乐：原游戏项目提供。
+宝可梦中文名称：PokeAPI data/v2/csv/pokemon_species_names.csv，language 12。
+https://github.com/PokeAPI/pokeapi
+PokeAPI 许可完整保留于 LICENSE-POKEAPI.txt。
+Pokémon 和 Pokémon 角色名称归 Nintendo / Creatures / GAME FREAK 等权利人所有。
+本项目为非官方、非商业本地修改版。

@@ -70,8 +70,8 @@ G.AchDefs = (() => {
     { id: 'mis10', cat: 'otros', tier: 1, name: 'Cumplidor', desc: 'Completa 10 misiones.', value: st('missionsDone'), goal: 10, reward: { t1: 3 } },
     { id: 'mis50', cat: 'otros', tier: 2, name: 'Constante', desc: 'Completa 50 misiones.', value: st('missionsDone'), goal: 50, reward: { t10: 1 }, title: 'Constante' },
     { id: 'mis200', cat: 'otros', tier: 3, name: 'Incansable', desc: 'Completa 200 misiones.', value: st('missionsDone'), goal: 200, reward: { t10: 3 } },
-    { id: 'group1', cat: 'otros', tier: 1, name: 'En compañía', desc: 'Juega una partida en grupo.', value: st('groupRuns'), goal: 1, reward: { t1: 2 } },
-    { id: 'group10', cat: 'otros', tier: 2, name: 'Compañero fiel', desc: 'Juega 10 partidas en grupo.', value: st('groupRuns'), goal: 10, reward: { t10: 1 }, title: 'Compañero fiel' }
+    { id: 'group1', onlineOnly: true, cat: 'otros', tier: 1, name: 'En compañía', desc: 'Juega una partida en grupo.', value: st('groupRuns'), goal: 1, reward: { t1: 2 } },
+    { id: 'group10', onlineOnly: true, cat: 'otros', tier: 2, name: 'Compañero fiel', desc: 'Juega 10 partidas en grupo.', value: st('groupRuns'), goal: 10, reward: { t10: 1 }, title: 'Compañero fiel' }
   ];
 
   // Un logro por legendario: "Vence a Mewtwo"...
@@ -89,5 +89,6 @@ G.AchDefs = (() => {
   const BY = {};
   for (const a of LIST) BY[a.id] = a;
 
-  return { CATS, LIST, BY };
+  // 暂时不展示或检查组队成就；保留定义和已有存档，方便以后恢复。
+  return { CATS, LIST: LIST.filter(a => !a.onlineOnly), BY };
 })();

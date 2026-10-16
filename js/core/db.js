@@ -718,6 +718,21 @@ G.DB = (() => {
     return { ok: true, isNew: true };
   }
 
+  // A separate, password-free save slot for the local Chinese edition.
+  // Never replace named accounts or their progress.
+  function playLocal() {
+    if (mode !== 'local') return { ok: false, error: '本地存档仅在单机模式下可用。' };
+    const k = '__local_adventure__';
+    const accs = read(K_ACC) || {};
+    if (!accs[k]) {
+      accs[k] = { name: '训练家', localOnly: true, created: Date.now() };
+      if (!write(K_ACC, accs)) return { ok: false, error: '浏览器无法保存进度，请允许本地存储，或选择游客试玩。' };
+    }
+    beginLocal(k, accs[k].name);
+    if (!commit()) return { ok: false, error: '存档写入失败，请检查浏览器存储空间。' };
+    return { ok: true, isNew: !save.partner };
+  }
+
   /**
    * Guarda la partida actual (no hace nada en modo invitado). En el navegador,
    * al momento; en la nube:
@@ -821,6 +836,16 @@ G.DB = (() => {
 
   // ---------------- helpers de partida ----------------
 
+  /** 中文单机版：只重置当前存档，保留槽位和其他旧存档。 */
+  function resetProgress() {
+    if (mode !== 'local' || guest || !key || !save) return { ok: false, error: '当前没有可重置的本地存档。' };
+    const previous = save;
+    save = newSave(user);
+    if (commit()) return { ok: true };
+    save = previous;
+    return { ok: false, error: '存档写入失败，原进度已保留，请检查浏览器存储空间。' };
+  }
+
   function owns(dex) { return !!(save && save.owned[dex]); }
 
   function grant(dex, from) {
@@ -845,8 +870,8 @@ G.DB = (() => {
   }
 
   return {
-    ready, register, login, loginWithGoogle, playAsGuest, logout, commit, deleteAccount, flush: pushNow,
-    owns, grant, ownsShiny, grantShiny, merge, setName, upgradesOf,
+    ready, register, login, loginWithGoogle, playAsGuest, playLocal, logout, commit, deleteAccount, flush: pushNow,
+    owns, grant, ownsShiny, grantShiny, merge, setName, upgradesOf, resetProgress,
     onSync(fn) { listeners.add(fn); },
     onLeave(fn) { leaveHooks.push(fn); },
     /** Acceso de bajo nivel para los módulos de red (sólo en modo nube). */

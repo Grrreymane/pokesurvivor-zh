@@ -1,6 +1,6 @@
 /* ============ game.js — flujo del juego y bucle principal ============
  *
- *   login ──> test de personalidad ──> menú ──> run ──> resumen ──> menú
+ *   本地存档 ──> test de personalidad ──> menú ──> run ──> resumen ──> menú
  *                (sólo la 1ª vez)          │
  *                                          ├─ Pokémon (colección)
  *                                          ├─ Mejoras
@@ -882,42 +882,28 @@ G.Game = (() => {
 G.Flow = {
   boot() {
     G.UI.initChrome();
-    G.LoginUI.init(); G.TestUI.init(); G.MenuUI.init(); G.GachaUI.init();
-    G.SocialUI.init(); G.RankingUI.init(); G.ModUI.init(); G.GoalsUI.init(); G.ProfileUI.init(); G.SettingsUI.init(); G.SupportUI.init(); G.NewsUI.init(); G.Updater.init();
-    // Tu nombre arriba a la derecha abre tu perfil.
-    document.getElementById('user-pill').onclick = () => G.GoalsUI.open('profile');
+    G.TestUI.init(); G.MenuUI.init(); G.GachaUI.init();
+    // 单机版暂不初始化好友、邀请、房间、排行和排行管理界面。
+    G.GoalsUI.init(); G.ProfileUI.init(); G.SettingsUI.init(); G.SupportUI.init(); G.NewsUI.init(); G.Updater.init();
+    // 本地存档状态直接打开存档设置。
+    document.getElementById('user-pill').onclick = () => G.SettingsUI.open('save');
     G.Audio.music('village');     // suena tras el primer clic (lo exige el navegador)
     G.Game.init();
-    // La base de datos (nube o local) recupera la sesión anterior.
+    // 保留此前正在使用的存档；首次启动才创建快捷本地存档。
     G.DB.ready().then(restored => {
+      if (!restored || !G.DB.save) {
+        const result = G.DB.playLocal();
+        if (!result.ok && !G.DB.save) G.DB.playAsGuest();
+      }
       document.getElementById('boot').classList.add('hidden');
-      // En otra tarea: crear el sonido para comprobarlo cuesta ~60 ms y no debe bloquear la carga.
-      setTimeout(() => this.tapToStart(() => { if (restored) this.afterLogin(); else this.toLogin(); }), 0);
+      this.continueLocal();
+      if (!G.DB.storageOk || G.DB.guest) G.UI.toast('浏览器无法保存，本次进度仅在当前页面保留。', 6000);
+    }).catch(() => {
+      document.querySelector('#boot .boot-ld').textContent = '无法打开本地存档，请允许浏览器使用本地存储后刷新页面。';
     });
   },
-  /**
-   * "Pulsa para empezar": los navegadores no dejan que una web suene hasta
-   * que se toca algo. Con esta pantalla la música empieza en cuanto entras.
-   * (Si el navegador ya deja sonar, no sale.)
-   */
-  tapToStart(then) {
-    G.Audio.unlock();
-    if (G.Audio.canPlay()) { then(); return; }
-    const el = document.getElementById('tap-start');
-    el.classList.remove('hidden');
-    const go = e => {
-      if (e.type === 'keydown' && ['Shift', 'Control', 'Alt', 'Meta', 'Tab'].includes(e.key)) return;
-      e.preventDefault(); e.stopPropagation();
-      G.Audio.unlock();
-      el.classList.add('hidden');
-      el.removeEventListener('click', go); removeEventListener('keydown', go, true);
-      then();
-    };
-    el.addEventListener('click', go);
-    addEventListener('keydown', go, true);
-  },
-  toLogin() { G.Audio.music('village'); G.LoginUI.open(); },
-  afterLogin() {
+  continueLocal() {
+    if (G.Game.state !== 'ui') G.Game.toUI();
     G.Audio.music('village');
     if (!G.DB.save.partner) G.TestUI.start();
     else this.goMenu();
@@ -926,7 +912,6 @@ G.Flow = {
     if (G.Game.state !== 'ui') G.Game.toUI();
     G.Audio.music('village');
     G.MenuUI.open();
-    G.LoginUI.offerRecovery();
   },
   /** Al cerrar el resumen: a la sala si sigues en una, si no al menú. */
   afterRun() {

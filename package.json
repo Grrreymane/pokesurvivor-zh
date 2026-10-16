@@ -1,0 +1,11 @@
+{
+  "name": "pokesurvivor-zh",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PokéSurvivor 简体中文本地版",
+  "scripts": {
+    "start": "node tools/serve.js",
+    "build": "node tools/build-local.js",
+    "test": "node --test tests/*.test.js"
+  }
+}

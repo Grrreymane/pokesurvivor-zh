@@ -1,6 +1,6 @@
 /* ============ settings-ui.js — pantalla de Ajustes (PC y móvil) ============
  * Se abre por encima de lo que haya (menú o pausa) y al cerrar vuelve ahí.
- * Pestañas: Sonido · Gráficos · Controles · Cuenta · Acerca de.
+ * Pestañas: Sonido · Gráficos · Controles · 存档 · Acerca de.
  * Los ajustes son de este dispositivo (G.Settings / G.Audio en el navegador).
  */
 G.SettingsUI = (() => {
@@ -70,12 +70,12 @@ G.SettingsUI = (() => {
     const box = $('set-body');
     box.scrollTop = 0;
     if (tab === 'sound') {
-      box.innerHTML = section('Sonido') + '<div id="set-sound" class="sound-inline"></div>';
+      box.innerHTML = section('Sonido', '背景音乐：宝可梦绿宝石。音效保留原游戏。') + '<div id="set-sound" class="sound-inline"></div>';
       G.UI.soundControls($('set-sound'));
     } else if (tab === 'gfx') {
       const auto = ['baja', 'media', 'alta'][G.Settings.autoLevel];
       box.innerHTML = section('Idioma', 'El juego se recarga al cambiarlo.')
-        + `<div class="chips set-chips" translate="no">${[['es', 'Español'], ['en', 'English']].map(([v, l]) =>
+        + `<div class="chips set-chips" translate="no">${[['zh-CN', '简体中文'], ['es', 'Español'], ['en', 'English']].map(([v, l]) =>
              `<button class="chip ${G.I18n.lang === v ? 'on' : ''}" data-lang="${v}">${l}</button>`).join('')}</div>`
         + section('Calidad', 'Cuántos efectos y partículas se dibujan. <b>Auto</b> la baja sola si el juego va a tirones (ahora: ' + auto + ').')
         + choice('quality', [['auto', 'Auto'], ['high', 'Alta'], ['mid', 'Media'], ['low', 'Baja']])
@@ -101,8 +101,8 @@ G.SettingsUI = (() => {
              <div><kbd>Esc</kbd> o <kbd>P</kbd></div><span>pausa</span>
              <div><kbd>1</kbd>–<kbd>3</kbd></div><span>elegir carta al subir de nivel</span>
            </div>`;
-    } else if (tab === 'acc') {
-      renderAccount(box);
+    } else if (tab === 'save') {
+      renderSave(box);
     } else {
       box.innerHTML = `<div class="about-logo">PokéSurvivor</div><p class="sub center">Versión ${esc(VERSION)}</p>`
         + `<p class="sub">Juego de fans <b>gratuito y sin ánimo de lucro</b>: sin anuncios ni compras. Pokémon y sus personajes son propiedad de Nintendo, Creatures y GAME FREAK; este proyecto no está afiliado a ellos.</p>`
@@ -110,39 +110,27 @@ G.SettingsUI = (() => {
         + `<ul class="credits">
              <li><b>Sprites:</b> PMD SpriteCollab y sus artistas (CC BY-NC 4.0).</li>
              <li><b>Datos de los Pokémon:</b> PokéAPI.</li>
-             <li><b>Música y sonidos:</b> originales, generados por el propio juego.</li>
+             <li><b>背景音乐：</b>宝可梦绿宝石（<a href="assets/music/README.txt" target="_blank">素材来源</a>）；音效保留原游戏。</li>
              <li><b>Fuente:</b> Pixelify Sans (OFL).</li>
            </ul>`
         + `<div class="row wrap" style="justify-content:center;gap:8px">
-             ${window.PS_PAGES ? `<a class="btn small" href="${G.I18n.lang === 'en' ? 'en/guide/' : 'guia/'}" target="_blank">Guía y preguntas</a>
-             <a class="btn small" href="${G.I18n.lang === 'en' ? 'en/pokedex/' : 'pokedex/'}" target="_blank">Pokédex</a>` : ''}
+             <a class="btn small" href="guide-zh.html" target="_blank">中文玩法指南</a>
              <button class="btn small" data-legal>Aviso legal y privacidad</button>
-             <a class="btn small" href="contacto/" target="_blank" rel="noopener">Contacto</a>
+             <a class="btn small" href="https://pokesurvivor.com/contacto/" target="_blank" rel="noopener">原作者联系页</a>
              <a class="btn small" href="${REPO}" target="_blank" rel="noopener">Código (GitHub)</a>
            </div>`;
     }
     wire(box);
   }
 
-  function renderAccount(box) {
-    const st = G.DB.guest ? 'guest' : G.DB.syncState;
-    const SYNC = { ok: 'Guardado en la nube', syncing: 'Guardando…', pending: 'Pendiente de subir (se sube al salir del juego)',
-                   offline: 'Sin conexión: se subirá al volver', local: 'Guardado sólo en este navegador', guest: 'Invitado: no se guarda' };
-    if (G.DB.guest) {
-      box.innerHTML = section('Cuenta', 'Estás jugando como <b>invitado</b>: tu progreso no se guarda al salir.')
-        + `<button class="btn gold" id="set-login">Crear cuenta o entrar</button>`;
-      return;
-    }
-    const nick = G.Social.me ? G.Social.me.name : (G.DB.user || '');
-    const kind = G.DB.mode === 'local' ? 'Cuenta de este navegador' : G.DB.nameAccount ? 'Nombre y contraseña' : 'Google';
-    box.innerHTML = section('Cuenta')
-      + `<div class="set-row"><div class="grow"><b>Apodo</b><small>Es único y no se puede cambiar.</small></div><span class="gold" translate="no">${esc(nick)}</span></div>`
-      + `<div class="set-row"><div class="grow"><b>Tipo de cuenta</b></div><span>${esc(kind)}</span></div>`
-      + `<div class="set-row"><div class="grow"><b>Partida</b></div><span>${esc(SYNC[st] || st)}</span></div>`
+  function renderSave(box) {
+    const canSave = G.DB.storageOk && !G.DB.guest;
+    box.innerHTML = section('本地存档', '打开游戏会自动继续当前存档，无需登录。伙伴、收藏、货币、强化和结算成绩自动保存；正在进行的战斗不会原地续玩。')
+      + `<div class="set-row"><div class="grow"><b>保存位置</b><small>请固定使用同一浏览器和游戏地址。清除网站数据会清除存档。</small></div><span>当前浏览器</span></div>`
+      + `<div class="set-row"><div class="grow"><b>保存状态</b></div><span>${canSave ? '自动保存已开启' : '无法保存 · 本次进度仅在当前页面保留'}</span></div>`
       + `<div class="row wrap" style="gap:8px;margin-top:12px">
-           <button class="btn" id="set-logout">Cerrar sesión</button>
-           <button class="btn danger" id="set-delete">Borrar cuenta</button>
-         </div><p class="note" id="set-msg"></p>`;
+           <button class="btn danger" id="set-reset" ${canSave ? '' : 'disabled'}>重置冒险进度</button>
+         </div><p class="note">重置会清除当前存档的伙伴、收藏、货币、强化和成绩，并重新选择伙伴。</p><p class="note" id="set-msg"></p>`;
   }
 
   function wire(box) {
@@ -153,28 +141,13 @@ G.SettingsUI = (() => {
     const full = $('set-full'); if (full) full.onclick = toggleFull;
     const lay = $('set-layout'); if (lay) lay.onclick = () => G.LayoutUI.open();
     box.querySelectorAll('[data-lang]').forEach(b => { b.onclick = () => { if (b.dataset.lang !== G.I18n.lang) G.I18n.set(b.dataset.lang); }; });
-    const lo = $('set-login'); if (lo) lo.onclick = () => { close(); leave(); };
-    const out = $('set-logout'); if (out) out.onclick = () => { close(); leave(); };
-    const del = $('set-delete');
-    if (del) del.onclick = async () => {
-      const ok = await G.UI.confirmDelete();
-      if (!ok) return;
-      del.disabled = true;
-      const r = await G.DB.deleteAccount(ok.pass);
-      if (!r.ok) { $('set-msg').textContent = r.error; del.disabled = false; return; }
-      close();
-      G.UI.toast('Cuenta borrada');
-      G.Audio.music(null);
-      G.Flow.toLogin();
+    const reset = $('set-reset');
+    if (reset) reset.onclick = async () => {
+      reset.disabled = true;
+      const result = await G.UI.resetProgress();
+      if (!result.ok && result.error) $('set-msg').textContent = result.error;
+      reset.disabled = false;
     };
-  }
-
-  /** Cerrar sesión (si estás en una partida, se abandona). */
-  function leave() {
-    if (G.DB.guest && !confirm('Eres invitado: se perderá todo el progreso. ¿Salir?')) return;
-    if (G.Game.state !== 'ui') G.Game.quit && G.Game.quit();
-    G.Audio.music(null);
-    G.DB.logout().then(() => G.Flow.toLogin());
   }
 
   return { init, open, close, get isOpen() { return isOpen(); } };

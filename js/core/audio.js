@@ -1,5 +1,6 @@
 /* ============ audio.js — sintetizador, secuenciador y efectos de sonido ============
- * Todo el sonido se genera en el momento con Web Audio: no hay ficheros.
+ * Sound effects and fallback music use Web Audio synthesis. The Chinese local
+ * edition plays the Emerald recordings configured in data/music-files.js.
  *
  *   G.Audio.music('village')   cambia de tema con fundido (ver data/music.js)
  *   G.Audio.sfx('coin')        efecto de sonido (con límite de repetición)
@@ -62,6 +63,7 @@ G.Audio = (() => {
     // 'suspended' o 'interrupted' (iPhone al volver de otra app): se reanuda.
     if (ctx.state !== 'running') ctx.resume().catch(() => {});
     if (wanted && !current) startSong(wanted);
+    if (current && current.media && current.media.paused) playMedia(current);
   }
   // En móvil, tocar la pantalla (pointerdown) no cuenta como gesto para el
   // sonido: sí levantar el dedo (pointerup / touchend). Se escuchan todos.
@@ -73,6 +75,7 @@ G.Audio = (() => {
     musicBus.gain.setTargetAtTime(settings.muted ? 0 : settings.music * 0.7, t, 0.05);
     // Los efectos se generan bajitos: ×2,4 los pone a la par de la música (medido).
     sfxBus.gain.setTargetAtTime(settings.muted ? 0 : settings.sfx * 2.4, t, 0.05);
+    for (const entry of mediaEntries) setMediaVolume(entry);
   }
 
   function setVolume(which, v) { settings[which] = G.U.clamp(v, 0, 1); save(); applyVolumes(); }
@@ -299,8 +302,86 @@ G.Audio = (() => {
 
   let wanted = null, current = null;
   const compiled = {};
+  const recordings = new Map();
+  const mediaEntries = new Set();
+
+  // Use the source sample rate for loop metadata: decodeAudioData may resample
+  // the buffer to the output device's rate, but loop positions are in seconds.
+  function recording(track) {
+    if (recordings.has(track.src)) return recordings.get(track.src);
+    const task = fetch(track.src).then(r => {
+      if (!r.ok) throw new Error('Music file: HTTP ' + r.status);
+      return r.arrayBuffer();
+    }).then(bytes => ctx.decodeAudioData(bytes)).catch(error => {
+      recordings.delete(track.src); throw error;
+    });
+    recordings.set(track.src, task);
+    // Limit retained decoded audio. A playing source holds its own buffer.
+    while (recordings.size > 3) recordings.delete(recordings.keys().next().value);
+    return task;
+  }
+
+  function setMediaVolume(entry) {
+    if (!entry.media) return;
+    entry.media.volume = settings.muted ? 0 : settings.music * 0.63 * (entry.fade == null ? 1 : entry.fade);
+  }
+
+  function playMedia(entry) {
+    if (entry.stopped) return;
+    entry.media.play().then(() => { if (entry.stopped) entry.media.pause(); }).catch(error => {
+      // Autoplay rejection is retried on the next real user gesture.
+      if (error.name !== 'NotAllowedError' && error.name !== 'AbortError') fallback(entry, error);
+    });
+  }
+
+  function fallback(entry, error) {
+    if (current !== entry || entry.stopped) return;
+    console.warn('[Audio] Background recording unavailable; using synthesized fallback:', error.message);
+    stopCurrent();
+    startSynth(entry.name);
+  }
+
+  function startRecording(name, track) {
+    const bus = ctx.createGain();
+    bus.gain.setValueAtTime(0.0001, ctx.currentTime);
+    bus.connect(musicBus);
+    const entry = current = { name, title: track.title, kind: 'recording', bus, stopped: false, source: null };
+    if (location.protocol === 'file:') {
+      // fetch(file:) is blocked in browsers. A media element still works when
+      // the standalone HTML file is opened directly, with a whole-file loop.
+      entry.media = new Audio(track.src);
+      entry.media.loop = true;
+      entry.media.preload = 'auto';
+      mediaEntries.add(entry);
+      setMediaVolume(entry);
+      entry.media.addEventListener('error', () => fallback(entry, new Error('Music file unavailable')));
+      playMedia(entry);
+      return;
+    }
+    recording(track).then(buffer => {
+      if (current !== entry || entry.stopped) return;
+      const source = entry.source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.loop = true;
+      const start = Number(track.loopStart) || 0;
+      const end = Number(track.loopEnd) || buffer.duration;
+      source.loopStart = start >= 0 && start < buffer.duration ? start : 0;
+      source.loopEnd = end > source.loopStart && end <= buffer.duration + 0.02 ? Math.min(end, buffer.duration) : buffer.duration;
+      source.connect(bus);
+      bus.gain.setValueAtTime(0.0001, ctx.currentTime);
+      bus.gain.linearRampToValueAtTime(1, ctx.currentTime + 0.8);
+      source.start();
+    }).catch(error => fallback(entry, error));
+  }
 
   function startSong(name) {
+    if (!ctx) return;
+    const track = G.MUSIC_FILES && G.MUSIC_FILES[name];
+    if (track) startRecording(name, track);
+    else startSynth(name);
+  }
+
+  function startSynth(name) {
     if (!ctx || !G.MUSIC[name]) return;
     const song = compiled[name] || (compiled[name] = compile(G.MUSIC[name]));
     const bus = ctx.createGain();
@@ -312,11 +393,28 @@ G.Audio = (() => {
 
   function stopCurrent() {
     if (!current) return;
-    const b = current.bus;
+    const entry = current;
+    entry.stopped = true;
+    const b = entry.bus;
     b.gain.cancelScheduledValues(ctx.currentTime);
     b.gain.setValueAtTime(b.gain.value, ctx.currentTime);
     b.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.7);
-    setTimeout(() => b.disconnect(), 900);
+    if (entry.source) {
+      const source = entry.source;
+      try { source.stop(ctx.currentTime + 0.72); } catch (e) {}
+    }
+    if (entry.media) {
+      const started = performance.now();
+      const fade = setInterval(() => {
+        entry.fade = Math.max(0, 1 - (performance.now() - started) / 700);
+        setMediaVolume(entry);
+        if (entry.fade <= 0) {
+          clearInterval(fade); entry.media.pause(); entry.media.removeAttribute('src');
+          mediaEntries.delete(entry);
+        }
+      }, 25);
+    }
+    setTimeout(() => { if (entry.source) entry.source.disconnect(); b.disconnect(); }, 900);
     current = null;
   }
 
@@ -331,7 +429,7 @@ G.Audio = (() => {
 
   // Planificador: programa con 150 ms de antelación.
   setInterval(() => {
-    if (!ctx || !current || ctx.state !== 'running') return;
+    if (!ctx || !current || !current.song || ctx.state !== 'running') return;
     const c = current, sd = 60 / c.song.bpm / 4;
     while (c.next < ctx.currentTime + 0.15) {
       const i = c.step % c.song.steps;
@@ -506,6 +604,8 @@ G.Audio = (() => {
     canPlay() { return !!ctx && ctx.state === 'running'; },
     get settings() { return settings; },
     get running() { return !!ctx && ctx.state === 'running'; },
-    get track() { return current && current.name; }
+    get track() { return current && current.name; },
+    get trackTitle() { return current && current.title || ''; },
+    get musicSource() { return current && current.kind === 'recording' ? 'emerald' : 'original'; }
   };
 })();

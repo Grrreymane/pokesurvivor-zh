@@ -22,11 +22,12 @@ G.I18n = (() => {
   try { saved = localStorage.getItem(KEY); } catch (e) { /* nada */ }
   const byPath = /\/en(\/|$)/.test(location.pathname) ? 'en' : null;
   const nav = ((navigator.languages && navigator.languages[0]) || navigator.language || 'es').toLowerCase();
-  const lang = saved === 'es' || saved === 'en' ? saved : byPath || (nav.startsWith('es') ? 'es' : 'en');
+  const lang = ['zh-CN', 'es', 'en'].includes(saved) ? saved : byPath || 'zh-CN';
   document.documentElement.lang = lang;
 
   const exact = new Map(), exactLow = new Map();
   let patterns = [], frag = null, fragLow = null, fragMap = new Map();
+  const patternMap = new Map();
   const cache = new Map();
   const L = '\\p{L}\\p{N}';
   const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -38,7 +39,7 @@ G.I18n = (() => {
       if (!en || es === en) continue;
       if (es.includes('{x}')) {
         const parts = es.split('{x}').map(reEsc);
-        patterns.push({ re: new RegExp('^' + parts.join('(.+?)') + '$', 'u'), reI: new RegExp('^' + parts.join('(.+?)') + '$', 'iu'), en });
+        patternMap.set(es, { re: new RegExp('^' + parts.join('(.+?)') + '$', 'u'), reI: new RegExp('^' + parts.join('(.+?)') + '$', 'iu'), en, specificity: es.replace(/\{x\}/g, '').length });
       } else {
         exact.set(es, en);
         exactLow.set(es.toLowerCase(), en);
@@ -47,6 +48,8 @@ G.I18n = (() => {
     }
     // Una sola expresión con todos los trozos (los más largos primero), sólo palabras enteras.
     const all = [...fragMap.keys()].sort((a, b) => b.length - a.length).map(reEsc).join('|');
+    // A specific template must win over a catch-all; later dictionaries can override a key.
+    patterns = [...patternMap.values()].sort((a, b) => b.specificity - a.specificity);
     frag = all ? new RegExp(`(?<![${L}])(${all})(?![${L}])`, 'giu') : null;
     cache.clear();
   }
@@ -128,7 +131,9 @@ G.I18n = (() => {
   function startDom() {
     if (lang === 'es') return;
     // Los enlaces a las páginas de la web, a su versión en inglés.
-    const EN_LINKS = { 'guia/': 'en/guide/', 'pokedex/': 'en/pokedex/' };
+    const EN_LINKS = lang === 'zh-CN'
+      ? { 'guia/': 'guide-zh.html', 'pokedex/': 'guide-zh.html#collection' }
+      : { 'guia/': 'en/guide/', 'pokedex/': 'en/pokedex/' };
     document.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute('href'); if (EN_LINKS[h]) a.setAttribute('href', EN_LINKS[h]); });
     walk(document.body);
     new MutationObserver(ms => {

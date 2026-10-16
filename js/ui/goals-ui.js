@@ -47,6 +47,9 @@
       end.setHours(24, 0, 0, 0);
       if (kind === 'w') { const add = (8 - (now.getDay() || 7)) % 7; end.setDate(end.getDate() + add); }
       const mins = Math.max(1, Math.round((end - now) / 60000));
+      if (G.I18n.lang === 'zh-CN') return mins >= 1440
+        ? Math.floor(mins / 1440) + ' 天 ' + Math.floor(mins % 1440 / 60) + ' 小时'
+        : Math.floor(mins / 60) + ' 小时 ' + (mins % 60) + ' 分钟';
       return mins >= 1440 ? Math.floor(mins / 1440) + ' d ' + Math.floor(mins % 1440 / 60) + ' h'
                           : Math.floor(mins / 60) + ' h ' + (mins % 60) + ' min';
     }
@@ -150,8 +153,7 @@
       const s = G.DB.save;
       s.profile = s.profile || { favs: [], title: '' };
       const P = s.profile;
-      box.insertAdjacentHTML('beforeend', `<p class="sub">${G.DB.online ? 'Así te ven los demás jugadores (desde el ranking y la lista de amigos).'
-        : 'Tu perfil se publica cuando juegas con una cuenta online.'}</p>
+      box.insertAdjacentHTML('beforeend', `<p class="sub">你的冒险档案保存在当前浏览器中，可以记录喜欢的伙伴和已解锁的称号。</p>
         <h3>Tus 3 Pokémon favoritos</h3>`);
       const favs = document.createElement('div');
       favs.className = 'fav-slots';
@@ -180,7 +182,7 @@
 
       const prev = document.createElement('button');
       prev.className = 'btn gold'; prev.style.marginTop = '16px';
-      prev.textContent = 'Ver mi perfil público';
+      prev.textContent = '查看冒险档案';
       prev.onclick = () => G.ProfileUI.showData(G.Social.profileData());
       box.appendChild(prev);
     }
@@ -254,7 +256,6 @@
         <div class="fav-slots view" id="prof-favs"></div>
         <div class="prof-marks">
           <div><span>Mejor tiempo</span><b>${fmt(b.solo || 0)}</b></div>
-          <div><span>En grupo</span><b>${fmt(b.group || 0)}</b></div>
           <div><span>Nivel máximo</span><b>${b.level || 0}</b></div>
           <div><span>Jefes</span><b>${(b.bosses || 0).toLocaleString('es')}</b></div>
           <div><span>Legendarios</span><b>${b.legends || 0}</b></div>
@@ -275,7 +276,7 @@
       const med = $('prof-medals');
       for (const id of d.medals || []) {
         const a = G.AchDefs.BY[id];
-        if (!a) continue;
+        if (!a || a.onlineOnly) continue;
         const m = document.createElement('div');
         m.className = 'pm';
         m.title = a.name;

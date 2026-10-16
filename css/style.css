@@ -30,11 +30,13 @@
   --green: #5fe08a;
   --shadow: #0a1430;
   --r1: #9fb1c9; --r2: #5fe08a; --r3: #4fb4ff; --r4: #c47bff; --r5: #ffcb3d;
-  --font: 'Pixelify', 'Segoe UI', system-ui, sans-serif;
+  --font: 'Pixelify', 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
 .hidden { display: none !important; }
+/* 单机版暂时隐藏在线面板，保留结构供以后恢复。 */
+[data-online-only] { display: none !important; }
 html, body { height: 100%; margin: 0; }
 body {
   background: #050914;
@@ -48,6 +50,10 @@ canvas { image-rendering: pixelated; image-rendering: crisp-edges; }
 #game { display: block; width: 100vw; height: 100vh; height: 100dvh; touch-action: none; }
 button { font: inherit; color: inherit; }
 input { font: inherit; }
+.local-accounts { margin-top: 8px; }
+.local-accounts summary { cursor: pointer; text-align: center; color: var(--muted); padding: 8px; font-size: 14px; }
+html[lang="zh-CN"] .legal p { line-height: 1.7; }
+html[lang="zh-CN"] .login-tag { line-height: 1.65; }
 
 /* ---------- capas de pantalla ---------- */
 .scr {
