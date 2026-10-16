@@ -6,6 +6,18 @@
 
 保留原项目提交历史、[代码许可证](LICENSE)和[素材署名](CREDITS.md)。完整中文说明见 [README.zh-CN.md](README.zh-CN.md)。
 
+## 在线试玩
+
+**[点击试玩中文版](https://grrreymane.github.io/pokesurvivor-zh/)**
+
+无需登录，首次进入选择伙伴后即可游玩。电脑使用 WASD / 方向键移动，手机请横屏。点击页面后开始播放背景音乐。
+
+进度保存在当前浏览器中；线上试玩与本机地址的存档相互独立。好友、排行榜和组队功能暂未开放。
+
+## 更新与部署
+
+本仓库使用 GitHub Pages，从 `main` 分支根目录发布。修改源码后运行 `npm run build` 和 `npm test`，将生成的首页、脚本和版本文件一并提交，再推送至本仓库；GitHub Pages 会自动更新试玩页面。
+
 ---
 
 以下为保留的原项目说明。
