@@ -18,6 +18,15 @@ TRACKS = [
     ('mt-chimney', 'RSE 146 Mt. Chimney', 1630643, 3980907),
     ('gym-leader', 'RSE 150 Battle! (Gym Leader)', 2190663, 2816160),
     ('super-ancient', 'RSE 229 Battle! (Super-Ancient Pokemon)', 1792215, 1733190),
+    ('route-104', 'RSE 122 Route 104', 1579673, 1666104),
+    ('petalburg-woods', 'RSE 123 Petalburg Woods', 880285, 1714761),
+    ('route-119', 'RSE 201 Route 119', 2202320, 2497684),
+    ('sealed-chamber', 'RSE 237 Sealed Chamber', 851578, 1592395),
+    ('abandoned-ship', 'RSE 240 Abandoned Ship', 850042, 1698522),
+    ('victory-road', 'RSE 242 Victory Road', 715768, 1980126),
+    ('route-113', 'RSE 142 Route 113', 906242, 2488104),
+    ('magma-hideout', 'RSE 219 Magma & Aqua Hideout', 903476, 1799546),
+    ('route-111', 'RSE 148 Route 111', 1882506, 1769316),
     ('frontier-brain', 'RSE 314 Battle! Frontier Brain', 2322994, 3966955),
 ]
 

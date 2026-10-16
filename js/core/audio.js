@@ -382,8 +382,9 @@ G.Audio = (() => {
   }
 
   function startSynth(name) {
-    if (!ctx || !G.MUSIC[name]) return;
-    const song = compiled[name] || (compiled[name] = compile(G.MUSIC[name]));
+    const fallback = (G.MUSIC_FILES && G.MUSIC_FILES[name] && G.MUSIC_FILES[name].fallback) || name;
+    if (!ctx || !G.MUSIC[fallback]) return;
+    const song = compiled[fallback] || (compiled[fallback] = compile(G.MUSIC[fallback]));
     const bus = ctx.createGain();
     bus.gain.setValueAtTime(0.0001, ctx.currentTime);
     bus.gain.linearRampToValueAtTime(1, ctx.currentTime + 0.8);

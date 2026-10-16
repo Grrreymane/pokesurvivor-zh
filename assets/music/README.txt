@@ -24,3 +24,14 @@ HTTP 模式通过 Web Audio 按原循环点播放、场景切换淡入淡出。
 ENLS 提供预循环整理；本项目仅添加场景映射与播放器接入。
 SHA256SUMS.txt 记录所用文件校验值；tools/fetch-emerald-music.py 记录对应下载地址。
 原游戏合成音效保持不变；原合成背景音乐仅作为音频加载失败时的回退。
+
+每张地图各四首，按本局游戏时间每分钟切换，暂停不推进轮换。首领、裂隙、审判音乐优先。
+forest：RSE 122 Route 104（104 号道路）
+forest：RSE 123 Petalburg Woods（橙华森林）
+forest：RSE 201 Route 119（119 号道路）
+cave：RSE 237 Sealed Chamber（布告石室）
+cave：RSE 240 Abandoned Ship（弃船）
+cave：RSE 242 Victory Road（冠军之路）
+volcano：RSE 142 Route 113（113 号道路）
+volcano：RSE 219 Magma & Aqua Hideout（熔岩队 / 海洋队基地）
+volcano：RSE 148 Route 111（111 号道路）

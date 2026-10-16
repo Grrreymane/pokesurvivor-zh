@@ -7,8 +7,8 @@
  */
 G.CHANGELOG = [
   { d: '2026-10-16', title: ['Música variada', 'Music rotation'], chg: [
-    ['La música del combate normal cambia cada minuto. Los jefes, las grietas y la Sentencia conservan sus temas propios.',
-     'Regular combat music now rotates every minute. Bosses, rifts, and Judgment keep their dedicated themes.']
+    ['El bosque, la cueva y el volcán tienen cuatro temas distintos cada uno, que cambian cada minuto. Los jefes, las grietas y la Sentencia conservan sus temas propios.',
+     'Forest, cave, and volcano each have four distinct tracks that rotate every minute. Bosses, rifts, and Judgment keep their dedicated themes.']
   ] },
   { d: '2026-10-15', title: ['Actualizaciones obligatorias', 'Required updates'], chg: [
     ['Cuando una actualización sea obligatoria (por ejemplo, para arreglar un fallo importante), la partida en curso se termina tras un aviso de 10 s y el juego se recarga. No pierdes nada: las monedas, los tickets, los récords y el ranking de esa partida se guardan como al abandonarla.',
