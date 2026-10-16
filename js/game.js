@@ -670,7 +670,8 @@ G.Game = (() => {
     G.Weather.update(dt, time, pl);
     G.FX.update(dt);
 
-    G.Audio.music(G.Judgment.active ? G.Judgment.music : G.Rift.inArena ? 'rift' : G.EnemyMgr.bossAlive() ? 'boss' : G.BIOME_MUSIC[biome % G.BIOME_MUSIC.length]);
+    // 普通战斗每分钟轮换曲目，独立于四分钟一次的地图切换；特殊战斗优先。
+    G.Audio.music(G.Judgment.active ? G.Judgment.music : G.Rift.inArena ? 'rift' : G.EnemyMgr.bossAlive() ? 'boss' : G.BIOME_MUSIC[Math.floor(time / 60) % G.BIOME_MUSIC.length]);
     if (!coop || G.Coop.isHost) maybeLevelUp();
     if (pl.bonds > 0) offerBond(true);
     if (G.Coop.isHost) checkAllDown(dt);
