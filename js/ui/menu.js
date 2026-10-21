@@ -250,7 +250,7 @@ G.MenuUI = (() => {
         G.DB.commit(true);
         G.Audio.sfx('buy');
         G.UI.refreshCoins();
-        G.UI.toast(`${mon.name} · ${u.name}: nivel ${now + 1}`);
+        G.UI.toast(G.t("text.0588", {0: mon.name, 1: u.name, 2: now + 1}));
         renderUpgrades();
       };
       box.appendChild(el);

@@ -17,14 +17,14 @@ G.ModUI = (() => {
   function init() {
     $('mod-back').onclick = () => G.RankingUI.open();
     $('mod-purge').onclick = async () => {
-      if (!confirm('¿Quitar del ranking TODAS las marcas de más de 1 hora (todas las tablas)? No se puede deshacer.')) return;
+      if (!confirm(G.t("text.1205"))) return;
       const b = $('mod-purge');
       b.disabled = true;
       try {
         const r = await G.Ranking.purgeAbove(3600, (i, n) => { b.textContent = 'Revisando ' + i + ' / ' + n + '…'; });
         G.UI.toast('Quitadas ' + r.rows + ' marcas de más de 1 hora (' + r.boards + ' tablas)', 5000);
       } catch (e) { G.UI.toast('No se pudo: ' + (e.code || e.message), 5000); }
-      b.disabled = false; b.textContent = 'Quitar marcas de más de 1 hora';
+      b.disabled = false; b.textContent = G.t("text.1204");
       render();
     };
     document.querySelectorAll('#mod-tabs .tab').forEach(t => { t.onclick = () => { tab = t.dataset.tab; render(); }; });
@@ -121,7 +121,7 @@ G.ModUI = (() => {
       const acts = document.createElement('span');
       acts.className = 'mod-acts';
       acts.append(btn('Desbanear', 'ghost', async () => {
-        try { await G.Ranking.setMarked(a.uid, false); G.UI.toast('Desbaneada'); row.remove(); }
+        try { await G.Ranking.setMarked(a.uid, false); G.UI.toast(G.t("text.1224")); row.remove(); }
         catch (e) { G.UI.toast('No se pudo: ' + (e.code || e.message)); }
       }));
       row.appendChild(acts);

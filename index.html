@@ -30,7 +30,7 @@
 
 <canvas id="game"></canvas>
 <!-- En móvil se juega en horizontal -->
-<div id="rotate" class="hidden"><div class="box center"><div id="rotate-ico"></div><h2>Gira el móvil</h2><p class="sub">PokéSurvivor se juega en horizontal.</p></div></div>
+<div id="rotate" class="hidden"><div class="box center"><div id="rotate-ico"></div><h2> 请旋转手机 </h2><p class="sub"> 宝可梦生存者需要横屏游玩。 </p></div></div>
 
 <!-- ====== Test de personalidad ====== -->
 <section id="scr-test" class="scr dim hidden">
@@ -45,14 +45,14 @@
 <!-- ====== Resultado del test ====== -->
 <section id="scr-result" class="scr dim hidden">
   <div class="box result">
-    <p class="sub">Tu personalidad es…</p>
+    <p class="sub"> 你的性格是… </p>
     <div class="trait" id="res-trait"></div>
     <p id="res-text"></p>
     <canvas id="res-stage" class="stage" width="200" height="150"></canvas>
-    <h3>Tu compañero: <span class="gold" id="res-name"></span></h3>
+    <h3> 你的伙伴： <span class="gold" id="res-name"></span></h3>
     <div class="row" style="justify-content:center;margin-top:14px">
-      <button id="res-ok" class="btn gold">¡Vamos juntos!</button>
-      <button id="res-other" class="btn">Elegir otro</button>
+      <button id="res-ok" class="btn gold"> 一起出发！ </button>
+      <button id="res-other" class="btn"> 重新选择 </button>
     </div>
   </div>
 </section>
@@ -60,13 +60,13 @@
 <!-- ====== Elegir compañero ====== -->
 <section id="scr-starters" class="scr dim hidden">
   <div class="box wide">
-    <h2>Elige a tu compañero</h2>
-    <p class="sub">Los iniciales de todas las regiones, y dos amigos más.</p>
+    <h2> 选择你的伙伴 </h2>
+    <p class="sub"> 各地区的最初伙伴，还有两位特别朋友。 </p>
     <div class="grid" id="starter-grid"></div>
     <div class="row between" style="margin-top:14px">
-      <button id="starter-back" class="btn ghost">Volver</button>
+      <button id="starter-back" class="btn ghost"> 返回 </button>
       <span id="starter-info" class="grow" style="color:var(--muted)"></span>
-      <button id="starter-ok" class="btn gold" disabled>Elegir</button>
+      <button id="starter-ok" class="btn gold" disabled> 选择 </button>
     </div>
   </div>
 </section>
@@ -75,25 +75,25 @@
 <section id="scr-menu" class="scr hidden">
   <div class="menu-left">
     <div class="logo">
-      <div class="t1">PokéSurvivor</div>
-      <div class="t2">Mundo Misterioso</div>
+      <div class="t1" data-i18n="meta.title"> 宝可梦幸存者 </div>
+      <div class="t2"> 不可思议的迷宫 </div>
     </div>
     <div class="partner-card">
       <canvas id="menu-partner" class="stage" width="260" height="200"></canvas>
       <div class="nm" id="menu-partner-name"></div>
       <div class="lv" id="menu-partner-info"></div>
-      <div class="seg hidden" id="menu-shiny"><button data-v="0">Normal</button><button data-v="1"></button></div>
+      <div class="seg hidden" id="menu-shiny"><button data-v="0"> 标准 </button><button data-v="1"></button></div>
     </div>
   </div>
   <div class="menu-right">
     <div class="box">
       <div class="menu-list">
-        <button class="menu-item play" data-go="play">Jugar<small>Entra en la mazmorra</small></button>
-        <button class="menu-item" data-go="dex">Pokémon<small id="menu-dex-count">Tu colección</small></button>
-        <button class="menu-item" data-go="upgrades">Mejoras<small>Haz más fuerte cada run</small></button>
-        <button class="menu-item" data-go="gacha">Gacha<small>9 regiones · Pokémon y shinies</small></button>
-        <button class="menu-item" data-go="goals">Misiones<small id="menu-goals-sub">Misiones, logros y perfil</small></button>
-        <button class="menu-item" data-go="settings">Ajustes<small>声音、画面、操作与存档</small></button>
+        <button class="menu-item play" data-go="play"> 开始游戏 <small> 进入迷宫冒险 </small></button>
+        <button class="menu-item" data-go="dex"> 宝可梦 <small id="menu-dex-count"> 你的宝可梦收藏 </small></button>
+        <button class="menu-item" data-go="upgrades"> 永久强化 <small> 让每次冒险都更强 </small></button>
+        <button class="menu-item" data-go="gacha"> 宝可梦召唤 <small> 九大地区 · 宝可梦与异色 </small></button>
+        <button class="menu-item" data-go="goals"> 任务 <small id="menu-goals-sub"> 任务、成就与个人资料 </small></button>
+        <button class="menu-item" data-go="settings"> 设置 <small> local.controls </small></button>
       </div>
     </div>
     <div class="box" style="padding:14px 18px">
@@ -113,12 +113,12 @@
   <button id="btn-settings" class="btn small ghost" title="Ajustes"></button>
 </div>
 <div id="sound-panel" class="box sound-panel hidden"></div>
-<div id="credits-line" class="credits-line hidden">Proyecto de fan sin ánimo de lucro · Sprites: SpriteCollab (CC BY-NC 4.0) · Pokémon © Nintendo/Creatures/GAME FREAK · <a href="#" class="legal-link" data-legal>Aviso legal</a></div>
+<div id="credits-line" class="credits-line hidden"> 非营利同人作品 · 精灵图：SpriteCollab（CC BY-NC 4.0）· Pokémon © Nintendo/Creatures/GAME FREAK · <a href="#" class="legal-link" data-legal> 法律声明 </a></div>
 
 <!-- ====== Novedades (cambios del juego) ====== -->
 <section id="scr-news" class="scr dim hidden">
   <div class="box news-box">
-    <div class="row between"><h2>Novedades</h2><button class="btn small ghost" id="news-close">Cerrar</button></div>
+    <div class="row between"><h2> 更新内容 </h2><button class="btn small ghost" id="news-close"> 关闭 </button></div>
     <div id="news-body" class="news-body"></div>
   </div>
 </section>
@@ -126,7 +126,7 @@
 <!-- ====== Apoyar el proyecto (donaciones) ====== -->
 <section id="scr-support" class="scr dim hidden">
   <div class="box support">
-    <div class="row between"><h2>Apoyar el proyecto</h2><button class="btn small ghost" id="sup-close">Cerrar</button></div>
+    <div class="row between"><h2> 支持项目 </h2><button class="btn small ghost" id="sup-close"> 关闭 </button></div>
     <div id="sup-body"></div>
   </div>
 </section>
@@ -134,13 +134,13 @@
 <!-- ====== Ajustes ====== -->
 <section id="scr-settings" class="scr dim hidden">
   <div class="box settings">
-    <div class="row between"><h2>Ajustes</h2><button class="btn small ghost" id="set-close">Cerrar</button></div>
+    <div class="row between"><h2> 设置 </h2><button class="btn small ghost" id="set-close"> 关闭 </button></div>
     <div class="tabs" id="set-tabs">
-      <button class="gen-tab" data-t="sound">Sonido</button>
-      <button class="gen-tab" data-t="gfx">Gráficos</button>
-      <button class="gen-tab" data-t="ctl">Controles</button>
-      <button class="gen-tab" data-t="save">存档</button>
-      <button class="gen-tab" data-t="about">Acerca de</button>
+      <button class="gen-tab" data-t="sound"> 声音 </button>
+      <button class="gen-tab" data-t="gfx"> 画面 </button>
+      <button class="gen-tab" data-t="ctl"> 操作 </button>
+      <button class="gen-tab" data-t="save" data-i18n="local.saveTab">存档</button>
+      <button class="gen-tab" data-t="about"> 关于 </button>
     </div>
     <div id="set-body" class="set-body"></div>
   </div>
@@ -149,7 +149,7 @@
 <!-- ====== Aviso legal y privacidad ====== -->
 <section id="scr-legal" class="scr dim hidden">
   <div class="box legal" style="width:min(640px,100%)">
-    <div class="row between"><h2>关于中文版与许可</h2><button class="btn small ghost" id="legal-close">关闭</button></div>
+    <div class="row between"><h2>关于中文版与许可</h2><button class="btn small ghost" id="legal-close"> 关闭 </button></div>
     <h3>中文本地修改版</h3>
     <p>本版本基于 JPTER78 开发的 PokéSurvivor，新增简体中文界面、中文宝可梦名称及本地快捷存档。原版官网为 <a href="https://pokesurvivor.com/" target="_blank" rel="noopener">pokesurvivor.com</a>。</p>
     <p>这是非官方、非商业同人游戏，与 Nintendo、Creatures、GAME FREAK 或 The Pokémon Company 无隶属关系。Pokémon 及相关角色与名称归原权利人所有。</p>
@@ -164,30 +164,18 @@
 </section>
 <div id="boot" class="boot">
   <div class="boot-in">
-    <h1>宝可梦幸存者</h1>
+    <h1 data-i18n="meta.title"> 宝可梦幸存者 </h1>
     <p>与伙伴一起，挑战无尽的宝可梦浪潮。</p>
     <p class="boot-ld">正在进入神秘世界…</p>
   </div>
 </div>
-<script>
-  (function () {
-    var s = null; try { s = localStorage.getItem('ps.lang'); } catch (e) {}
-    var n = ((navigator.languages && navigator.languages[0]) || navigator.language || 'es').toLowerCase();
-    var l = ['zh-CN', 'es', 'en'].indexOf(s) >= 0 ? s : 'zh-CN';
-    document.documentElement.lang = l;
-    if (l === 'en') {
-      var p = document.querySelectorAll('#boot p');
-      p[0].textContent = 'A Pokémon survival game, free in your browser and on mobile.';
-      p[1].textContent = 'Loading…';
-    }
-  })();
-</script>
+
 <noscript>
   <div class="boot noscript">
     <div class="boot-in">
-      <h1>PokéSurvivor</h1>
-      <p>PokéSurvivor necesita JavaScript para funcionar. Actívalo para jugar.</p>
-      <p>Fan game gratuito de supervivencia con 966 Pokémon de las 9 regiones: elige tu compañero, sobrevive a las hordas, evoluciona tus ataques, enfréntate a legendarios y juega en cooperativo con hasta 4 amigos.</p>
+      <h1> 宝可梦幸存者 </h1>
+      <p> 宝可梦幸存者需要 JavaScript 才能运行，请启用后游玩。 </p>
+      <p> 免费同人生存游戏，汇集九大地区的 966 只宝可梦：选择伙伴，抵御敌潮，进化招式，挑战传说宝可梦，还能与最多 4 位好友合作游玩。 </p>
 
     </div>
   </div>
@@ -196,27 +184,27 @@
 <!-- ====== Apodo (para amigos y ranking) ====== -->
 <section id="scr-nick" class="scr dim hidden" data-online-only inert>
   <div class="box" style="width:min(440px,100%)">
-    <h2>Elige tu apodo</h2>
+    <h2> 设置你的昵称 </h2>
     <p class="sub">Es el nombre que verán tus amigos y el que sale en el ranking.
       Tu nombre y tu correo de Google no se enseñan a nadie.</p>
     <form id="nick-form" autocomplete="off">
       <input id="nick-in" class="field" maxlength="16" spellcheck="false" placeholder="3-16 letras, números o _">
       <p id="nick-err" class="err"></p>
-      <div class="row"><button id="nick-ok" class="btn gold grow" type="submit">Guardar apodo</button></div>
+      <div class="row"><button id="nick-ok" class="btn gold grow" type="submit"> 保存昵称 </button></div>
     </form>
-    <div class="row" style="margin-top:8px"><button id="nick-later" class="btn ghost grow" type="button">Ahora no</button></div>
+    <div class="row" style="margin-top:8px"><button id="nick-later" class="btn ghost grow" type="button"> 暂时不用 </button></div>
   </div>
 </section>
 
 <!-- ====== Amigos ====== -->
 <section id="scr-friends" class="scr dim hidden" data-online-only inert>
   <div class="box wide">
-    <div class="row between"><h2>Amigos</h2>
-      <div class="row"><button id="fr-room" class="btn small gold hidden">Ir a la sala</button><button class="btn small ghost" data-back>Volver</button></div></div>
+    <div class="row between"><h2> 好友 </h2>
+      <div class="row"><button id="fr-room" class="btn small gold hidden"> 前往房间 </button><button class="btn small ghost" data-back> 返回 </button></div></div>
     <p class="sub" id="fr-me"></p>
     <form id="fr-add" class="row" autocomplete="off">
       <input id="fr-name" class="field grow" maxlength="16" spellcheck="false" placeholder="Apodo de tu amigo">
-      <button class="btn gold" type="submit" data-sfx="confirm">Añadir amigo</button>
+      <button class="btn gold" type="submit" data-sfx="confirm"> 添加好友 </button>
     </form>
     <p id="fr-msg" class="note"></p>
     <div id="fr-list" class="fr-list"></div>
@@ -226,14 +214,14 @@
 <!-- ====== Sala (partida en grupo) ====== -->
 <section id="scr-lobby" class="scr dim hidden" data-online-only inert>
   <div class="box wide">
-    <div class="row between"><h2>Sala</h2>
-      <div class="row"><button id="lobby-menu" class="btn small ghost">Menú</button><button id="lobby-leave" class="btn small ghost">Salir de la sala</button></div></div>
+    <div class="row between"><h2> 房间 </h2>
+      <div class="row"><button id="lobby-menu" class="btn small ghost"> 菜单 </button><button id="lobby-leave" class="btn small ghost"> 离开房间 </button></div></div>
     <p class="sub" id="lobby-sub"></p>
     <div id="lobby-members" class="lobby-members"></div>
-    <h3 id="lobby-inv-title" style="margin:14px 0 6px">Invitar amigos</h3>
+    <h3 id="lobby-inv-title" style="margin:14px 0 6px"> 邀请好友 </h3>
     <div id="lobby-invite" class="fr-list"></div>
     <div class="row" style="margin-top:14px">
-      <button id="lobby-start" class="btn gold grow">Empezar partida</button>
+      <button id="lobby-start" class="btn gold grow"> 开始游戏 </button>
     </div>
     <p class="note" id="lobby-note"></p>
   </div>
@@ -242,14 +230,14 @@
 <!-- ====== Ranking ====== -->
 <section id="scr-rank" class="scr dim hidden" data-online-only inert>
   <div class="box wide">
-    <div class="row between"><h2>Ranking <span class="sub" style="font-size:15px">· tiempo aguantado</span></h2><span class="row" style="gap:6px"><button id="rk-mod" class="btn small ghost hidden">Moderación</button><button class="btn small ghost" data-back>Volver</button></span></div>
+    <div class="row between"><h2> 排行榜 <span class="sub" style="font-size:15px"> · 生存时间 </span></h2><span class="row" style="gap:6px"><button id="rk-mod" class="btn small ghost hidden"> 排行榜管理 </button><button class="btn small ghost" data-back> 返回 </button></span></div>
     <div class="gen-tabs" id="rk-mode"></div>
     <div class="filters" id="rk-period"></div>
     <div class="row rk-tools">
       <div class="filters" id="rk-scope" style="margin:0"></div>
       <input id="rk-poke" class="field" list="rk-dl" placeholder="Filtrar por Pokémon (histórico)" spellcheck="false">
       <datalist id="rk-dl"></datalist>
-      <button id="rk-clear" class="btn small ghost hidden">Quitar filtro</button>
+      <button id="rk-clear" class="btn small ghost hidden"> 清除筛选 </button>
     </div>
     <div id="rk-list" class="rk-list"></div>
     <div id="rk-me" class="rk-me"></div>
@@ -259,10 +247,10 @@
 <!-- ====== Moderación del ranking (sólo la cuenta de admin, ver js/ui/mod-ui.js) ====== -->
 <section id="scr-mod" class="scr dim hidden" data-online-only inert>
   <div class="box wide">
-    <div class="row between"><h2>Moderación</h2><span class="row" style="gap:6px"><button class="btn small danger" id="mod-purge">Quitar marcas de más de 1 hora</button><button class="btn small ghost" id="mod-back">Volver</button></span></div>
+    <div class="row between"><h2> 排行榜管理 </h2><span class="row" style="gap:6px"><button class="btn small danger" id="mod-purge"> 移除超过 1 小时的成绩 </button><button class="btn small ghost" id="mod-back"> 返回 </button></span></div>
     <div class="tabs" id="mod-tabs">
-      <div class="tab on" data-tab="rep">Reportes</div>
-      <div class="tab" data-tab="sus">Baneados</div>
+      <div class="tab on" data-tab="rep"> 举报记录 </div>
+      <div class="tab" data-tab="sus"> 已封禁 </div>
     </div>
     <div id="mod-list" class="rk-list" style="max-height:60vh"></div>
   </div>
@@ -271,11 +259,11 @@
 <!-- ====== Misiones, logros y perfil ====== -->
 <section id="scr-goals" class="scr dim hidden">
   <div class="box wide">
-    <div class="row between"><h2>Misiones</h2><button class="btn small ghost" data-back>Volver</button></div>
+    <div class="row between"><h2> 任务 </h2><button class="btn small ghost" data-back> 返回 </button></div>
     <div class="tabs" id="goals-tabs">
-      <div class="tab on" data-tab="missions">Misiones</div>
-      <div class="tab" data-tab="ach">Logros</div>
-      <div class="tab" data-tab="profile">Perfil</div>
+      <div class="tab on" data-tab="missions"> 任务 </div>
+      <div class="tab" data-tab="ach"> 成就 </div>
+      <div class="tab" data-tab="profile"> 个人资料 </div>
     </div>
     <div id="goals-body" class="goals-body"></div>
   </div>
@@ -284,7 +272,7 @@
 <!-- ====== Perfil público de un jugador ====== -->
 <section id="scr-profile" class="scr dim hidden">
   <div class="box profile-box">
-    <div class="row end"><button class="btn small ghost" id="prof-close">Cerrar</button></div>
+    <div class="row end"><button class="btn small ghost" id="prof-close"> 关闭 </button></div>
     <div id="prof-body"></div>
   </div>
 </section>
@@ -293,15 +281,15 @@
 <div id="invite-pop" class="box invite-pop hidden" data-online-only inert>
   <div id="inv-text"></div>
   <div class="row" style="margin-top:10px">
-    <button id="inv-yes" class="btn gold small grow" data-sfx="confirm">Unirme</button>
-    <button id="inv-no" class="btn ghost small">No, gracias</button>
+    <button id="inv-yes" class="btn gold small grow" data-sfx="confirm"> 加入 </button>
+    <button id="inv-no" class="btn ghost small"> 暂不加入 </button>
   </div>
 </div>
 
 <!-- ====== Colección ====== -->
 <section id="scr-dex" class="scr dim hidden">
   <div class="box wide">
-    <div class="row between"><h2>Pokémon <span id="dex-total" class="sub" style="font-size:15px"></span></h2><button class="btn small ghost" data-back>Volver</button></div>
+    <div class="row between"><h2> 宝可梦 <span id="dex-total" class="sub" style="font-size:15px"></span></h2><button class="btn small ghost" data-back> 返回 </button></div>
     <div class="gen-tabs" id="dex-gens"></div>
     <div class="split" style="margin-top:8px">
       <div>
@@ -316,13 +304,13 @@
 <!-- ====== Mejoras ====== -->
 <section id="scr-upgrades" class="scr dim hidden">
   <div class="box wide">
-    <div class="row between"><h2>Mejoras</h2><button class="btn small ghost" data-back>Volver</button></div>
+    <div class="row between"><h2> 永久强化 </h2><button class="btn small ghost" data-back> 返回 </button></div>
     <div class="upg-head">
       <canvas id="upg-stage" class="stage" width="120" height="96"></canvas>
       <div class="grow">
-        <p class="sub" style="margin:0">Cada Pokémon tiene sus propias mejoras: sólo cuentan cuando juegas con él.</p>
+        <p class="sub" style="margin:0"> 每只宝可梦拥有独立强化，仅在使用该宝可梦时生效。 </p>
         <div class="row" style="margin-top:8px">
-          <label for="upg-mon" style="margin:0">Pokémon</label>
+          <label for="upg-mon" style="margin:0"> 宝可梦 </label>
           <select id="upg-mon" class="field" style="width:auto;min-width:220px"></select>
         </div>
       </div>
@@ -334,7 +322,7 @@
 <!-- ====== Gacha ====== -->
 <section id="scr-gacha" class="scr dim hidden">
   <div class="box wide">
-    <div class="row between"><h2>Gacha</h2><button class="btn small ghost" data-back>Volver</button></div>
+    <div class="row between"><h2> 宝可梦召唤 </h2><button class="btn small ghost" data-back> 返回 </button></div>
     <div class="gen-tabs" id="gacha-gens"></div>
     <div class="split" style="margin-top:8px">
       <div>
@@ -345,9 +333,9 @@
           <div class="feat" id="gacha-feat"></div>
         </div>
         <div class="row" style="margin-top:14px">
-          <button id="pull-1" class="btn grow" data-sfx="none">Tirar ×1 · <span id="cost-1"></span></button>
-          <button id="pull-10" class="btn gold grow" data-sfx="none">Tirar ×10 · <span id="cost-10"></span></button>
-          <button id="pull-10b" class="btn gold grow" data-sfx="none">Tirar ×10 · <span id="cost-10b"></span></button>
+          <button id="pull-1" class="btn grow" data-sfx="none"> 召唤 ×1 · <span id="cost-1"></span></button>
+          <button id="pull-10" class="btn gold grow" data-sfx="none"> 召唤 ×10 · <span id="cost-10"></span></button>
+          <button id="pull-10b" class="btn gold grow" data-sfx="none"> 召唤 ×10 · <span id="cost-10b"></span></button>
         </div>
         <p class="note tickets-line" id="gacha-tickets"></p>
         <p class="note" id="gacha-pity"></p>
@@ -360,62 +348,62 @@
 <div id="pull-fx" class="hidden">
   <canvas id="slot" width="176" height="170" title="Clic para acelerar"></canvas>
   <div class="pull-results" id="pull-results"></div>
-  <button id="pull-close" class="btn gold hidden">Continuar</button>
+  <button id="pull-close" class="btn gold hidden"> 继续 </button>
 </div>
 
 <!-- ====== Durante la run ====== -->
 <section id="scr-levelup" class="scr dim hidden">
   <div class="box center">
-    <h2>¡Nivel <span id="lvl-num">2</span>!</h2>
-    <p class="sub">Elige una recompensa · <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></p>
+    <h2> 等级 <span id="lvl-num">2</span>!</h2>
+    <p class="sub"> 选择一项奖励 · <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></p>
     <div id="cards" class="cards"></div>
-    <button id="lvl-reroll" class="btn small ghost hidden" data-sfx="none" style="margin-top:10px">Cambiar opciones (<span id="lvl-rr-n">1</span>) · <kbd>R</kbd></button>
+    <button id="lvl-reroll" class="btn small ghost hidden" data-sfx="none" style="margin-top:10px"> 刷新选项（ <span id="lvl-rr-n">1</span>) · <kbd>R</kbd></button>
     <p id="lvl-wait" class="note hidden"></p>
   </div>
 </section>
 
 <section id="scr-bond" class="scr dim hidden">
   <div class="box center">
-    <h2 class="bond-title">¡Vínculo!</h2>
-    <p class="sub bond-hint">Los movimientos unidos se lanzan a la vez y ocupan un solo hueco</p>
+    <h2 class="bond-title"> 招式联结！ </h2>
+    <p class="sub bond-hint"> 联结的招式会同时释放，且只占用一个招式栏位 </p>
     <p id="bond-sub" class="sub"></p>
     <div id="bond-cards" class="cards"></div>
-    <div class="row" style="justify-content:center"><button id="bond-back" class="btn hidden">Atrás</button></div>
+    <div class="row" style="justify-content:center"><button id="bond-back" class="btn hidden"> 返回 </button></div>
   </div>
 </section>
 
 <section id="scr-item" class="scr dim hidden">
   <div class="box center">
-    <h2>¡Un objeto!</h2>
-    <p class="sub">Sólo puedes llevar uno · <kbd>1</kbd> <kbd>2</kbd></p>
+    <h2> 发现道具！ </h2>
+    <p class="sub"> 只能携带一件道具 · <kbd>1</kbd> <kbd>2</kbd></p>
     <div id="item-cards" class="cards"></div>
   </div>
 </section>
 
 <section id="scr-pause" class="scr dim hidden">
   <div class="box center" style="width:min(460px,100%)">
-    <h2>Pausa</h2>
-    <p class="sub kbd-hint"><kbd>WASD</kbd> moverse · <kbd>1</kbd>–<kbd>4</kbd> movimiento · <kbd>Q</kbd>/<kbd>E</kbd> ciclar · <kbd>Esc</kbd> pausa</p>
-    <p class="sub touch-hint">Arrastra el dedo para moverte · toca un ataque para cambiarlo</p>
-    <p id="pause-coop" class="note hidden">Partida en grupo: el juego sigue mientras estás aquí.</p>
+    <h2> 暂停 </h2>
+    <p class="sub kbd-hint"><kbd>WASD</kbd> 移动 · <kbd>1</kbd>–<kbd>4</kbd> 招式 · <kbd>Q</kbd>/<kbd>E</kbd> 切换 · <kbd>Esc</kbd> 暂停 </p>
+    <p class="sub touch-hint"> 拖动手指移动 · 点击招式切换 </p>
+    <p id="pause-coop" class="note hidden"> 联机模式：打开此菜单时，游戏仍会继续。 </p>
     <div id="pause-sound" class="sound-inline"></div>
     <div class="row" style="justify-content:center">
-      <button id="btn-resume" class="btn gold">Continuar</button>
-      <button id="btn-pause-settings" class="btn">Ajustes</button>
-      <button id="btn-quit" class="btn">Abandonar run</button>
+      <button id="btn-resume" class="btn gold"> 继续 </button>
+      <button id="btn-pause-settings" class="btn"> 设置 </button>
+      <button id="btn-quit" class="btn"> 结束本局 </button>
     </div>
   </div>
 </section>
 
 <section id="scr-over" class="scr dim hidden">
   <div class="box center" style="width:min(480px,100%)">
-    <h2 id="over-title">Has caído…</h2>
+    <h2 id="over-title"> 你倒下了… </h2>
     <div id="over-stats" class="stats"></div>
-    <button id="btn-again" class="btn gold">Volver al menú</button>
+    <button id="btn-again" class="btn gold"> 返回主菜单 </button>
   </div>
 </section>
 
 <!-- datos generados -->
-<script defer src="js/app.min.js?v=23a5f637d5"></script>
+<script defer src="js/app.min.js?v=c28b5ff454"></script>
 </body>
 </html>

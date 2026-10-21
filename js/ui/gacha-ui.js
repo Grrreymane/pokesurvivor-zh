@@ -42,8 +42,8 @@ G.GachaUI = (() => {
        radial-gradient(circle at 15% 80%, rgba(196,123,255,.3), transparent 50%),
        linear-gradient(135deg, ${c1}, ${c2} 55%, ${c3})`;
     $('banner-title').textContent = banner.name + ' Misterioso';
-    $('banner-desc').textContent = `Los ${all.length} Pokémon de la generación ${gen}. ¡Los legendarios esperan!`;
-    $('gacha-owned').innerHTML = `Tienes ${owned} de ${all.length}` +
+    $('banner-desc').textContent = G.t("text.0590", {0: all.length, 1: gen});
+    $('gacha-owned').innerHTML = G.t("text.0591", {0: owned, 1: all.length}) +
       (shinies ? ` · ${G.Icons.html('shiny', 12)} ${shinies} shiny` : '');
 
     const feat = $('gacha-feat');
@@ -53,7 +53,7 @@ G.GachaUI = (() => {
     }
 
     const pity = (s.pity && s.pity[gen]) || 0;
-    $('gacha-pity').textContent = `Tiradas sin legendaria en ${banner.name}: ${pity} / ${G.Gacha.PITY_5}`;
+    $('gacha-pity').textContent = G.t("text.0595", {0: banner.name, 1: pity, 2: G.Gacha.PITY_5});
 
     $('gacha-rates').innerHTML = '<h3>Probabilidades</h3>' + G.Gacha.RATES.slice().reverse().map(([r, w]) => `
       <div><span style="color:${G.Gacha.RARITY_COLOR[r]}">${G.UI.stars(r, 10)} ${G.Gacha.RARITY_NAME[r]}</span>
@@ -81,7 +81,7 @@ G.GachaUI = (() => {
   async function pull(n, use = 't1') {
     if (busy) return;
     const res = G.Gacha.pull(G.DB.save, n, gen, use);
-    if (!res) { G.Audio.sfx('error'); G.UI.toast('No tienes tickets suficientes: consíguelos jugando'); return; }
+    if (!res) { G.Audio.sfx('error'); G.UI.toast(G.t("text.0604")); return; }
     G.Progress.checkAch();
     G.DB.commit(true);
     busy = true;

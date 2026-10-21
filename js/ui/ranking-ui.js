@@ -16,7 +16,7 @@ G.RankingUI = (() => {
       const v = $('rk-poke').value.trim().toLowerCase();
       const p = G.DEX.find(x => x.name.toLowerCase() === v);
       if (!v) { setDex(null); return; }
-      if (!p) { G.UI.toast('No hay ningún Pokémon con ese nombre'); return; }
+      if (!p) { G.UI.toast(G.t("text.0862")); return; }
       setDex(p.dex);
     };
     $('rk-clear').onclick = () => { $('rk-poke').value = ''; setDex(null); };
@@ -94,7 +94,7 @@ G.RankingUI = (() => {
       const pokemonName = dex ? ' · ' + esc(G.T(G.DEX_BY[dex].name)) : '';
       const context = `${periodName} · ${modeName}${pokemonName}`;
       $('rk-me').innerHTML = !G.Social.me ? '在好友页面设置昵称后，即可参与排行榜。'
-        : me && me.out ? `你尚未进入前 50 名（${context}）。可在总榜查看准确排名。`
+        : me && me.out ? G.t("text.1200", {0: context})
         : me ? `你的最佳排名（${context}）：<b class="gold">#${me.pos}</b> · ${fmt(me.t)}`
         : `暂无你的纪录（${context}）。`;
       return;
@@ -112,7 +112,7 @@ G.RankingUI = (() => {
                            : `Aún no estás en el top 50 ${pn} ${where}. Tu puesto exacto está en Histórico.`)
       : me ? (en ? `<span translate="no">Your best ${where} rank ${pn}: <b class="gold">#${me.pos}</b> · ${fmt(me.t)}</span>`
                  : `Tu mejor puesto ${pn} ${where}: <b class="gold">#${me.pos}</b> · ${fmt(me.t)}`)
-      : (en ? `<span translate="no">You don't have a ${where} record ${pn} yet.</span>` : `Aún no tienes marca ${pn} ${where}.`);
+      : (en ? `<span translate="no">You don't have a ${where} record ${pn} yet.</span>` : G.t("text.0866", {0: pn, 1: where}));
   }
 
   function rowEl(r, pos, mine, b, done) {
@@ -135,11 +135,11 @@ G.RankingUI = (() => {
       rep.title = sent ? 'Ya la has reportado' : 'Reportar marca sospechosa';
       rep.innerHTML = G.Icons.html('flag', 16);
       rep.onclick = async () => {
-        if (rep.classList.contains('sent')) { G.UI.toast('Ya has reportado esta marca'); return; }
+        if (rep.classList.contains('sent')) { G.UI.toast(G.t("text.1167")); return; }
         if (!confirm('¿Reportar la marca de ' + r.names.join(', ') + ' como trampa?')) return;
-        rep.classList.add('sent'); rep.title = 'Ya la has reportado';
+        rep.classList.add('sent'); rep.title = G.t("text.1166");
         await G.Ranking.report(b, r);
-        G.UI.toast('Gracias: la revisaremos');
+        G.UI.toast(G.t("text.1169"));
       };
       el.appendChild(rep);
     } else el.appendChild(document.createElement('span'));

@@ -22,7 +22,11 @@ G.I18n = (() => {
   try { saved = localStorage.getItem(KEY); } catch (e) { /* nada */ }
   const byPath = /\/en(\/|$)/.test(location.pathname) ? 'en' : null;
   const nav = ((navigator.languages && navigator.languages[0]) || navigator.language || 'es').toLowerCase();
-  const lang = ['zh-CN', 'es', 'en'].includes(saved) ? saved : byPath || 'zh-CN';
+  const normalize = l => /^zh/i.test(l || '') ? 'zh-CN' : String(l || '').toLowerCase().split('-')[0];
+  const requested = normalize(new URLSearchParams(location.search || '').get('lang'));
+  const browser = normalize(nav);
+  const supported = ['zh-CN', 'en', 'ja', 'ko', 'es'];
+  const lang = supported.includes(requested) ? requested : byPath || (supported.includes(browser) ? browser : 'zh-CN');
   document.documentElement.lang = lang;
 
   const exact = new Map(), exactLow = new Map();
@@ -61,7 +65,8 @@ G.I18n = (() => {
 
   /** Traduce un texto (sin espacios de los lados) al idioma actual. */
   function t(s) {
-    if (lang === 'es' || !s || typeof s !== 'string') return s;
+    if (!s || typeof s !== 'string') return s;
+    if (G.TextOriginal && Object.prototype.hasOwnProperty.call(G.TextOriginal, s)) return G.t(s);
     if (!/\p{L}/u.test(s)) return s;
     const c = cache.get(s);
     if (c !== undefined) return c;
@@ -129,7 +134,6 @@ G.I18n = (() => {
   }
 
   function startDom() {
-    if (lang === 'es') return;
     // Los enlaces a las páginas de la web, a su versión en inglés.
     const EN_LINKS = lang === 'zh-CN'
       ? { 'guia/': 'guide-zh.html', 'pokedex/': 'guide-zh.html#collection' }
@@ -147,11 +151,17 @@ G.I18n = (() => {
   }
 
   // ---------------- canvas y ventanas del navegador ----------------
-  if (lang !== 'es') {
+  {
     const P = CanvasRenderingContext2D.prototype;
     for (const k of ['fillText', 'strokeText', 'measureText']) {
       const orig = P[k];
-      P[k] = function (s, ...a) { return orig.call(this, typeof s === 'string' ? t(s) : s, ...a); };
+      P[k] = function (s, ...a) {
+        const before = this.font;
+        const font = { 'zh-CN': 'NotoSC', ja: 'NotoJP', ko: 'NotoKR' }[lang];
+        if (font) this.font = before.replace(/Pixelify/g, font + ', NotoSC, Pixelify');
+        try { return orig.call(this, typeof s === 'string' ? t(s) : s, ...a); }
+        finally { this.font = before; }
+      };
     }
     const oc = window.confirm, oa = window.alert;
     window.confirm = s => oc.call(window, t(s));
@@ -160,7 +170,9 @@ G.I18n = (() => {
 
   function set(l) {
     try { localStorage.setItem(KEY, l); } catch (e) { /* nada */ }
-    location.reload();
+    const url = new URL(location.href);
+    url.searchParams.set('lang', l === 'zh-CN' ? 'zh' : l);
+    location.assign(url.href);
   }
 
   return { lang, add, t, f, set, startDom, walk };

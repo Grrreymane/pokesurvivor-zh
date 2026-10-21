@@ -6,6 +6,10 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-21', title: ['Cinco idiomas', 'Five languages'], new: [
+    ['Chino, inglés, japonés, coreano y español; el idioma del enlace tiene prioridad y se incluyen fuentes CJK.',
+     'Chinese, English, Japanese, Korean and Spanish; the link language takes priority and CJK fonts are bundled.']
+  ] },
   { d: '2026-10-16', title: ['Música variada', 'Music rotation'], chg: [
     ['El bosque, la cueva y el volcán tienen cuatro temas distintos cada uno, que cambian cada minuto. Los jefes, las grietas y la Sentencia conservan sus temas propios.',
      'Forest, cave, and volcano each have four distinct tracks that rotate every minute. Bosses, rifts, and Judgment keep their dedicated themes.']

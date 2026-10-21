@@ -71,21 +71,21 @@
               <small>${Math.min(m.prog, m.goal).toLocaleString('es')} / ${m.goal.toLocaleString('es')}</small></div>
             <div class="m-rw">${G.Progress.rewardText(d.reward)}</div>`;
           const btn = document.createElement('button');
-          if (m.claimed) { btn.className = 'btn small'; btn.disabled = true; btn.textContent = 'Recogido'; }
+          if (m.claimed) { btn.className = 'btn small'; btn.disabled = true; btn.textContent = G.t("text.0624"); }
           else if (done) {
-            btn.className = 'btn small gold'; btn.textContent = 'Recoger'; btn.dataset.sfx = 'none';
-            btn.onclick = () => { if (G.Progress.claim(m, weekly)) { G.Audio.sfx('buy'); G.UI.toast('¡Premio recogido!'); render(); } };
+            btn.className = 'btn small gold'; btn.textContent = G.t("text.0623"); btn.dataset.sfx = 'none';
+            btn.onclick = () => { if (G.Progress.claim(m, weekly)) { G.Audio.sfx('buy'); G.UI.toast(G.t("text.0628")); render(); } };
           } else if (!weekly && !M.rerolled) {
-            btn.className = 'btn small ghost'; btn.textContent = 'Cambiar';
-            btn.title = 'Cambia esta misión por otra (una vez al día)';
+            btn.className = 'btn small ghost'; btn.textContent = G.t("text.0626");
+            btn.title = G.t("text.0627");
             btn.onclick = () => { if (G.Progress.reroll(i)) render(); };
-          } else { btn.className = 'btn small ghost'; btn.disabled = true; btn.textContent = 'En curso'; }
+          } else { btn.className = 'btn small ghost'; btn.disabled = true; btn.textContent = G.t("text.0625"); }
           el.appendChild(btn);
           box.appendChild(el);
         });
       };
-      section('Diarias', M.daily, false);
-      section('Semanales', M.weekly, true);
+      section(G.t("text.0620"), M.daily, false);
+      section(G.t("text.0621"), M.weekly, true);
     }
 
     // ---------------- logros ----------------
@@ -182,7 +182,7 @@
 
       const prev = document.createElement('button');
       prev.className = 'btn gold'; prev.style.marginTop = '16px';
-      prev.textContent = '查看冒险档案';
+      prev.textContent = G.t("local.profile");
       prev.onclick = () => G.ProfileUI.showData(G.Social.profileData());
       box.appendChild(prev);
     }

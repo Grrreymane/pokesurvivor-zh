@@ -1,0 +1,7 @@
+{
+  "zh": {"title":"宝可梦幸存者","description":"选择宝可梦伙伴，在不断涌来的敌潮中生存。使用方向键、WASD 或触屏摇杆移动，切换招式，收集经验并升级、进化。探索森林、洞窟和火山，挑战首领，收集伙伴与异色宝可梦。进度保存在当前浏览器。"},
+  "en": {"title":"PokéSurvivor","description":"Choose a Pokémon partner and survive waves of enemies. Move with WASD, arrow keys or the touch joystick, switch moves, and gain experience to level up and evolve. Explore forests, caves and volcanoes, battle bosses, and collect Pokémon and shiny forms. Progress is saved in your browser."},
+  "ja": {"title":"ポケサバイバー","description":"パートナーのポケモンと、押し寄せる敵の群れを生き抜こう。矢印キー、WASD、タッチスティックで移動し、技を切り替えながら経験値を集めてレベルアップ・進化。森、洞窟、火山を探索し、ボスに挑んで仲間や色違いのポケモンを集めよう。進行状況はブラウザに保存されます。"},
+  "ko": {"title":"포켓몬 서바이버","description":"파트너 포켓몬과 함께 몰려오는 적들 사이에서 살아남으세요. 방향키, WASD 또는 터치 조이스틱으로 이동하고 기술을 바꾸며 경험치를 모아 레벨을 올리고 진화하세요. 숲과 동굴, 화산을 탐험하고 보스에 도전하며 동료와 색이 다른 포켓몬을 모으세요. 진행 상황은 브라우저에 저장됩니다."},
+  "es": {"title":"PokéSurvivor","description":"Elige a tu compañero Pokémon y sobrevive a oleadas de enemigos. Muévete con WASD, las flechas o el joystick táctil, cambia de movimiento y gana experiencia para subir de nivel y evolucionar. Explora bosques, cuevas y volcanes, enfréntate a jefes y colecciona Pokémon y variantes shiny. Tu progreso se guarda en el navegador."}
+}

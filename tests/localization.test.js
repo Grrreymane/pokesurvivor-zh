@@ -13,8 +13,8 @@ const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const entryScripts = [...read('dev.html').matchAll(/<script\b[^>]*\bsrc="([^"]+)"[^>]*>/g)]
   .map(match => match[1]);
 const languageScripts = entryScripts.filter(file =>
-  /^js\/core\/i18n\.js$/.test(file) ||
-  /^js\/data\/(?:lang-[\w-]+|pokedex|pokemon-zh)\.js$/.test(file));
+  /^js\/core\/(?:platform-)?i18n\.js$/.test(file) ||
+  /^js\/data\/(?:text-original|pokedex)\.js$/.test(file));
 const countSlots = text => (text.match(/\{x\}/g) || []).length;
 const plain = value => JSON.parse(JSON.stringify(value));
 
@@ -39,6 +39,7 @@ function browser({ language, storage = new MemoryStorage(), pathname = '/' } = {
   let reloads = 0;
 
   class CanvasContext {
+    font = '16px Pixelify';
     fillText(text, ...args) { canvasCalls.push({ kind: 'fill', text, args }); }
     strokeText(text, ...args) { canvasCalls.push({ kind: 'stroke', text, args }); }
     measureText(text) {
@@ -70,7 +71,12 @@ function browser({ language, storage = new MemoryStorage(), pathname = '/' } = {
   const context = vm.createContext({
     G: {}, localStorage: storage, document,
     navigator: { language: 'en-US', languages: ['en-US'], onLine: false },
-    location: { pathname, protocol: 'http:', hostname: 'localhost', reload() { reloads++; } },
+    location: { pathname, search: language ? '?lang=' + language : '', href: 'http://localhost/' + (language ? '?lang=' + language : ''), protocol: 'http:', hostname: 'localhost', assign(url) { this.href = url; reloads++; } },
+    URL, URLSearchParams,
+    AIMadeGames: { async i18n({ original, lang }) {
+      const catalog = lang === 'zh' ? original : JSON.parse(read('translations/' + lang + '.json'));
+      return (key, vars) => (catalog[key] ?? original[key] ?? key).replace(/\{(\w+)\}/g, (all, k) => vars && Object.hasOwn(vars, k) ? vars[k] : all);
+    } },
     CanvasRenderingContext2D: CanvasContext,
     MutationObserver: Observer,
     NodeFilter: { SHOW_TEXT: 4, SHOW_ELEMENT: 1 },
@@ -96,7 +102,7 @@ function browser({ language, storage = new MemoryStorage(), pathname = '/' } = {
   return {
     context, storage, loaded, dictionaries, canvasCalls, dialogCalls, observers, run,
     get reloads() { return reloads; },
-    languages() { for (const file of languageScripts) run(file); return this; },
+    async languages() { for (const file of languageScripts) run(file); await context.G.Text.init(); return this; },
     async database() {
       run('js/data/pokedex.js');
       run('js/core/firebase-config.js');
@@ -121,9 +127,9 @@ function textNode(text, parent = element()) {
   return node;
 }
 
-test('Chinese dictionaries cover every upstream English key and preserve every placeholder', () => {
-  const english = browser({ language: 'en' }).languages();
-  const chinese = browser({ language: 'zh-CN' }).languages();
+test('Chinese dictionaries cover every upstream English key and preserve every placeholder', async () => {
+  const english = await browser({ language: 'en' }).languages();
+  const chinese = await browser({ language: 'zh-CN' }).languages();
   const original = Object.assign({}, ...english.dictionaries.map(dict => dict.entries));
   const translated = Object.assign({}, ...chinese.dictionaries.map(dict => dict.entries));
   assert.ok(Object.keys(original).length > 500, 'The upstream dictionary must actually be loaded');
@@ -140,16 +146,16 @@ test('Chinese dictionaries cover every upstream English key and preserve every p
   }
 });
 
-test('a fresh browser defaults to Chinese even with English browser preferences', () => {
-  const page = browser().languages();
-  assert.equal(page.context.G.I18n.lang, 'zh-CN');
-  assert.equal(page.context.document.documentElement.lang, 'zh-CN');
-  assert.equal(page.context.G.T('Pausa'), '暂停');
-  assert.equal(page.context.G.T('Pistola Agua'), '水枪');
+test('without a lang parameter the browser language is used', async () => {
+  const page = await browser().languages();
+  assert.equal(page.context.G.I18n.lang, 'en');
+  assert.equal(page.context.document.documentElement.lang, 'en');
+  assert.equal(page.context.G.T('Pausa'), 'Pause');
+  assert.equal(page.context.G.T('Pistola Agua'), 'Water Gun');
 });
 
-test('dynamic battle messages translate names, numbers and multiple placeholders', () => {
-  const { context: { G } } = browser({ language: 'zh-CN' }).languages();
+test('dynamic battle messages translate names, numbers and multiple placeholders', async () => {
+  const { context: { G } } = await browser({ language: 'zh-CN' }).languages();
   assert.equal(G.T('¡Has conseguido a Pikachu shiny!'), '获得了异色 皮卡丘！');
   assert.equal(G.T('¡Pikachu shiny salvaje apareció!'), '野生的异色 皮卡丘 出现了！');
   assert.equal(G.T('¡Nivel 12!'), '升至 12 级！');
@@ -160,16 +166,16 @@ test('dynamic battle messages translate names, numbers and multiple placeholders
   assert.equal(G.T(null), null);
 });
 
-test('supplemental overrides replace dynamic translations and invalidate cached messages', () => {
-  const { context: { G } } = browser({ language: 'zh-CN' }).languages();
+test('supplemental overrides replace dynamic translations and invalidate cached messages', async () => {
+  const { context: { G } } = await browser({ language: 'zh-CN' }).languages();
   assert.equal(G.T('¡Nivel 12!'), '升至 12 级！');
   G.I18n.add({ '¡Nivel {x}!': '已升至 {x} 级！' });
   assert.equal(G.T('¡Nivel 12!'), '已升至 12 级！');
   assert.equal(G.T('¡Nivel 15!'), '已升至 15 级！');
 });
 
-test('DOM updates translate while player nicknames remain untouched', () => {
-  const page = browser({ language: 'zh-CN' }).languages();
+test('DOM updates translate while player nicknames remain untouched', async () => {
+  const page = await browser({ language: 'zh-CN' }).languages();
   page.context.G.I18n.startDom();
   assert.equal(page.observers.length, 1);
   const label = textNode('Pausa');
@@ -188,8 +194,8 @@ test('DOM updates translate while player nicknames remain untouched', () => {
   assert.equal(button.getAttribute('aria-label'), '暂停');
 });
 
-test('canvas measurement, drawing and dialogs receive the same translated text', () => {
-  const page = browser({ language: 'zh-CN' }).languages();
+test('canvas measurement, drawing and dialogs receive the same translated text', async () => {
+  const page = await browser({ language: 'zh-CN' }).languages();
   const ctx = new page.context.CanvasRenderingContext2D();
   const measurement = ctx.measureText('Pausa');
   ctx.fillText('Pausa', 10, 20);
@@ -201,24 +207,25 @@ test('canvas measurement, drawing and dialogs receive the same translated text',
   assert.deepEqual(page.dialogCalls.map(call => call.text), ['暂停', '暂停']);
 });
 
-test('switching to English after Chinese reloads without Chinese dictionaries or names', () => {
-  const chinese = browser().languages();
+test('switching to English after Chinese reloads without Chinese dictionaries or names', async () => {
+  const chinese = await browser({ language: 'zh-CN' }).languages();
   chinese.context.G.I18n.set('en');
   assert.equal(chinese.storage.getItem('ps.lang'), 'en');
   assert.equal(chinese.reloads, 1);
-  const english = browser({ storage: chinese.storage }).languages();
+  const english = await browser({ storage: chinese.storage }).languages();
   assert.equal(english.context.G.I18n.lang, 'en');
   assert.equal(english.context.G.T('Pausa'), 'Pause');
   assert.equal(english.context.G.T('Pistola Agua'), 'Water Gun');
   assert.equal(english.context.G.T('¡Nivel 12!'), 'Level 12!');
   assert.equal(english.context.G.T('¡Has conseguido a Pikachu shiny!'), 'You got a shiny Pikachu!');
   assert.equal(english.context.G.DEX_BY[25].name, 'Pikachu');
-  assert.deepEqual(english.dictionaries.map(dict => dict.file), ['js/data/lang-en.js']);
+  assert.ok(chinese.context.location.href.endsWith('?lang=en'));
+  assert.ok(!english.loaded.some(file => file.includes('lang-zh')));
 });
 
-test('every playable Pokémon has a Chinese name without changing stats or dex identity', () => {
-  const chinese = browser({ language: 'zh-CN' }).languages().context.G;
-  const english = browser({ language: 'en' }).languages().context.G;
+test('every playable Pokémon has a Chinese name without changing stats or dex identity', async () => {
+  const chinese = (await browser({ language: 'zh-CN' }).languages()).context.G;
+  const english = (await browser({ language: 'en' }).languages()).context.G;
   assert.ok(chinese.DEX.length > 900);
   assert.equal(chinese.DEX.length, english.DEX.length);
   const missing = chinese.DEX.filter(mon => !/\p{Script=Han}/u.test(mon.name));

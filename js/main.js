@@ -34,9 +34,10 @@
     return true;
   }
 
-  function boot() {
+  async function boot() {
     if (maintenance()) return;
     if (broken()) return;
+    await G.Text.init();
     G.I18n.startDom();
     // Espera a la fuente pixel para que la UI no salte al cargarla.
     const ready = document.fonts && document.fonts.load ? document.fonts.load('16px Pixelify') : Promise.resolve();

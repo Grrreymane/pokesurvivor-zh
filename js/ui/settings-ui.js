@@ -70,16 +70,16 @@ G.SettingsUI = (() => {
     const box = $('set-body');
     box.scrollTop = 0;
     if (tab === 'sound') {
-      box.innerHTML = section('Sonido', '背景音乐：宝可梦绿宝石。音效保留原游戏。') + '<div id="set-sound" class="sound-inline"></div>';
+      box.innerHTML = section(G.t("text.0023"), G.t("local.musicInfo")) + '<div id="set-sound" class="sound-inline"></div>';
       G.UI.soundControls($('set-sound'));
     } else if (tab === 'gfx') {
       const auto = ['baja', 'media', 'alta'][G.Settings.autoLevel];
-      box.innerHTML = section('Idioma', 'El juego se recarga al cambiarlo.')
-        + `<div class="chips set-chips" translate="no">${[['zh-CN', '简体中文'], ['es', 'Español'], ['en', 'English']].map(([v, l]) =>
+      box.innerHTML = section(G.t("text.0908"), 'El juego se recarga al cambiarlo.')
+        + `<div class="chips set-chips" translate="no">${[['zh-CN', '简体中文'], ['en', 'English'], ['ja', '日本語'], ['ko', '한국어'], ['es', 'Español']].map(([v, l]) =>
              `<button class="chip ${G.I18n.lang === v ? 'on' : ''}" data-lang="${v}">${l}</button>`).join('')}</div>`
-        + section('Calidad', 'Cuántos efectos y partículas se dibujan. <b>Auto</b> la baja sola si el juego va a tirones (ahora: ' + auto + ').')
+        + section(G.t("text.0886"), 'Cuántos efectos y partículas se dibujan. <b>Auto</b> la baja sola si el juego va a tirones (ahora: ' + auto + ').')
         + choice('quality', [['auto', 'Auto'], ['high', 'Alta'], ['mid', 'Media'], ['low', 'Baja']])
-        + section('Pantalla')
+        + section(G.t("text.0896"))
         + toggle('dmgNumbers', 'Números de daño', 'Los números que salen al golpear y al recibir daño.')
         + toggle('calm', 'Menos sacudidas y destellos', 'La cámara tiembla menos y los fogonazos son suaves.')
         + toggle('fps', 'Mostrar FPS', 'Fotogramas por segundo, en la esquina de abajo.')
@@ -87,13 +87,13 @@ G.SettingsUI = (() => {
              <button class="btn small" id="set-full">${isFull() ? 'Salir' : 'Activar'}</button></div>`
            : iosTip() ? `<div class="set-row"><div class="grow"><b>Pantalla completa</b><small>${esc(IOS_TIP)}</small></div></div>` : '');
     } else if (tab === 'ctl') {
-      box.innerHTML = section('En móvil o tablet')
+      box.innerHTML = section(G.t("text.0910"))
         + `<p class="sub">Pon el dedo en cualquier parte y arrastra para moverte: el joystick aparece donde tocas. Toca un ataque de abajo para cambiarlo y el botón de arriba a la derecha para pausar. Se juega en horizontal.</p>`
         + `<div class="set-row"><div class="grow"><b>Tamaño del joystick</b><small>Cuánto hay que arrastrar el dedo.</small></div></div>`
         + choice('stick', [[0.8, 'Pequeño'], [1, 'Normal'], [1.25, 'Grande']])
         + `<div class="set-row"><div class="grow"><b>Colocar los botones</b><small>Pon los ataques, la pausa y el joystick (fijo, si quieres) donde quieras de la pantalla.</small></div>
              <button class="btn small" id="set-layout">Colocar</button></div>`
-        + section('En PC')
+        + section(G.t("text.0911"))
         + `<div class="keys">
              <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> o flechas</div><span>moverse</span>
              <div><kbd>1</kbd>–<kbd>4</kbd> o clic en el icono</div><span>elegir ataque</span>
@@ -106,12 +106,12 @@ G.SettingsUI = (() => {
     } else {
       box.innerHTML = `<div class="about-logo">PokéSurvivor</div><p class="sub center">Versión ${esc(VERSION)}</p>`
         + `<p class="sub">Juego de fans <b>gratuito y sin ánimo de lucro</b>: sin anuncios ni compras. Pokémon y sus personajes son propiedad de Nintendo, Creatures y GAME FREAK; este proyecto no está afiliado a ellos.</p>`
-        + section('Créditos')
+        + section(G.t("text.0957"))
         + `<ul class="credits">
              <li><b>Sprites:</b> PMD SpriteCollab y sus artistas (CC BY-NC 4.0).</li>
              <li><b>Datos de los Pokémon:</b> PokéAPI.</li>
              <li><b>背景音乐：</b>宝可梦绿宝石（<a href="assets/music/README.txt" target="_blank">素材来源</a>）；音效保留原游戏。</li>
-             <li><b>Fuente:</b> Pixelify Sans (OFL).</li>
+             <li><b>Fuente:</b> Pixelify Sans · Noto Sans (OFL).</li>
            </ul>`
         + `<div class="row wrap" style="justify-content:center;gap:8px">
              <a class="btn small" href="guide-zh.html" target="_blank">中文玩法指南</a>
@@ -125,9 +125,9 @@ G.SettingsUI = (() => {
 
   function renderSave(box) {
     const canSave = G.DB.storageOk && !G.DB.guest;
-    box.innerHTML = section('本地存档', '打开游戏会自动继续当前存档，无需登录。伙伴、收藏、货币、强化和结算成绩自动保存；正在进行的战斗不会原地续玩。')
+    box.innerHTML = section(G.t("local.save"), G.t("local.saveInfo"))
       + `<div class="set-row"><div class="grow"><b>保存位置</b><small>请固定使用同一浏览器和游戏地址。清除网站数据会清除存档。</small></div><span>当前浏览器</span></div>`
-      + `<div class="set-row"><div class="grow"><b>保存状态</b></div><span>${canSave ? '自动保存已开启' : '无法保存 · 本次进度仅在当前页面保留'}</span></div>`
+      + `<div class="set-row"><div class="grow"><b>保存状态</b></div><span>${canSave ? G.t("local.autosave") : G.t("local.temporary")}</span></div>`
       + `<div class="row wrap" style="gap:8px;margin-top:12px">
            <button class="btn danger" id="set-reset" ${canSave ? '' : 'disabled'}>重置冒险进度</button>
          </div><p class="note">重置会清除当前存档的伙伴、收藏、货币、强化和成绩，并重新选择伙伴。</p><p class="note" id="set-msg"></p>`;

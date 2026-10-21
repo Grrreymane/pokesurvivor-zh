@@ -33,6 +33,17 @@
   --font: 'Pixelify', 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', system-ui, sans-serif;
 }
 
+/* Noto Sans subsets cover every bundled CJK string, including species names. */
+@font-face { font-family: NotoSC; src: url('../assets/fonts/NotoSansSC-game.ttf'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: NotoJP; src: url('../assets/fonts/NotoSansJP-game.ttf'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: NotoKR; src: url('../assets/fonts/NotoSansKR-game.ttf'); font-weight: 100 900; font-display: swap; }
+html:lang(zh) { --font: NotoSC, Pixelify, system-ui, sans-serif; }
+html:lang(ja) { --font: NotoJP, NotoSC, Pixelify, system-ui, sans-serif; }
+html:lang(ko) { --font: NotoKR, NotoSC, Pixelify, system-ui, sans-serif; }
+.btn, .chip, .menu-item { white-space: normal; overflow-wrap: anywhere; }
+.set-row .grow, .menu-right, .menu-left { min-width: 0; }
+html:lang(ja) .logo .t1, html:lang(ko) .logo .t1 { font-size: clamp(24px, 3.5vw, 42px); }
+
 * { box-sizing: border-box; }
 .hidden { display: none !important; }
 /* 单机版暂时隐藏在线面板，保留结构供以后恢复。 */

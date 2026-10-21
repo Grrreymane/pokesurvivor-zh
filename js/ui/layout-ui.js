@@ -124,7 +124,7 @@ G.LayoutUI = (() => {
     for (const k in pos) if (moved[k]) pad[k] = [+(pos[k][0] / w).toFixed(4), +(pos[k][1] / h).toFixed(4)];
     G.Settings.set('pad', Object.keys(pad).length ? pad : null);
     G.Settings.set('stickMode', mode);
-    G.UI.toast('Botones colocados');
+    G.UI.toast(G.t("text.0376"));
     close();
   }
 

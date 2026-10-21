@@ -161,7 +161,7 @@
           G.Net.syncMembers(room.members.map(m => m.uid));
         } else if (G.Net.open_) G.Net.close();
         if (what === 'room-closed') {
-          G.UI.toast('La sala se ha cerrado', 2600);
+          G.UI.toast(G.t("text.0833"), 2600);
           if (G.UI.isOpen('scr-lobby')) G.MenuUI.open();
         }
         if (G.UI.isOpen('scr-lobby')) render();
@@ -235,7 +235,7 @@
           el.className = 'fr-row';
           el.innerHTML = `<i class="dot ${f.play ? 'play' : 'on'}"></i><b translate="no">${esc(f.name)}</b><span class="st">${f.play ? 'Jugando' : 'En línea'}</span><span class="grow"></span>`;
           const b = document.createElement('button');
-          b.className = 'btn small gold'; b.textContent = 'Invitar';
+          b.className = 'btn small gold'; b.textContent = G.t("text.0791");
           b.onclick = async () => { const r = await G.Social.invite(f.uid); G.UI.toast(r.ok ? r.msg : r.error); };
           el.appendChild(b);
           inv.appendChild(el);

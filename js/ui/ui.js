@@ -34,9 +34,9 @@ G.UI = (() => {
     const t = (s && s.tickets) || { t1: 0, t10: 0 };
     $('tickets-pill').innerHTML = `${G.Icons.html('ticket', 18)} ${t.t1} &nbsp;${G.Icons.html('ticket10', 18)} ${t.t10}`;
     const canSave = G.DB.storageOk && !G.DB.guest;
-    $('user-pill').innerHTML = G.Icons.html('book', 18) + `<span>${canSave ? '本地存档' : '暂未保存'}</span>` +
+    $('user-pill').innerHTML = G.Icons.html('book', 18) + `<span>${canSave ? G.t("local.save") : G.t("local.unsaved")}</span>` +
       `<i class="sync ${canSave ? 'local' : 'offline'}"></i>`;
-    $('user-pill').title = canSave ? '进度自动保存在当前浏览器，点击查看存档设置' : '浏览器无法保存，本次进度仅在当前页面保留';
+    $('user-pill').title = canSave ? G.t("local.saveTip") : G.t("local.blocked");
   }
 
   let toastEl = null, toastT = 0;
@@ -110,14 +110,14 @@ G.UI = (() => {
 
   /** 重置前只确认进度清除，不涉及账户或密码。 */
   async function resetProgress() {
-    if (!confirm('要重置当前冒险吗？伙伴、收藏、货币、强化和成绩都将清除，且无法撤销。')) return { ok: false };
+    if (!confirm(G.t("local.resetConfirm"))) return { ok: false };
     const result = G.DB.resetProgress();
     if (!result.ok) return result;
     G.SettingsUI.close();
     closeLegal();
     G.Game.toUI();
     G.Flow.continueLocal();
-    toast('冒险进度已重置，重新认识你的伙伴吧。');
+    toast(G.t("local.resetDone"));
     return result;
   }
 

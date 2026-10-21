@@ -221,7 +221,7 @@ G.Game = (() => {
     over(d) {
       if (d) Object.assign(pl, { kills: d.ki, bosses: d.bo, coins: d.co, level: Math.max(pl.level, d.lv || 1), t1: d.t1 || pl.t1, t10: d.t10 || pl.t10 });
       if (d && d.t) time = d.t;
-      if (d && d.why === 'host') G.UI.toast('El anfitrión ha terminado la partida', 3200);
+      if (d && d.why === 'host') G.UI.toast(G.t("text.0410"), 3200);
       endRun(!(d && d.why === 'host'));
     },
     lost(msg) { G.UI.toast(msg, 3600); endRun(false); },
@@ -580,7 +580,7 @@ G.Game = (() => {
         try {
           G.UI.hideAll();
           quitRun();
-          G.UI.toast('El juego ha fallado: tu partida se ha guardado hasta aquí', 5000);
+          G.UI.toast(G.t("text.1119"), 5000);
         } catch (e2) { console.error('[Game] no se pudo cerrar la partida:', e2); }
       }
     }
@@ -900,7 +900,7 @@ G.Flow = {
       this.continueLocal();
       if (!G.DB.storageOk || G.DB.guest) G.UI.toast('浏览器无法保存，本次进度仅在当前页面保留。', 6000);
     }).catch(() => {
-      document.querySelector('#boot .boot-ld').textContent = '无法打开本地存档，请允许浏览器使用本地存储后刷新页面。';
+      document.querySelector('#boot .boot-ld').textContent = G.t("local.openFailed");
     });
   },
   continueLocal() {

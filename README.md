@@ -194,6 +194,16 @@ python tools/fetch_credits.py    # CREDITS.md
 
 ## Créditos y licencia
 
+### 多语言维护
+
+原始语言为 `locales/zh.json`，游戏名使用 `meta.title`。英文、日文、韩文和西班牙文分别在 `translations/en.json`、`ja.json`、`ko.json`、`es.json`。`translations/game-details.json` 是待审核的平台标题和简介，不是运行时语言文件。
+
+运行时通过 `AIMadeGames.i18n` 读取平台译文，优先使用 `?lang=zh|en|ja|ko|es`，其次使用浏览器语言。平台不可用时显示内置中文。改动中文或别名映射后先运行 `node tools/sync-text-original.js`，再运行 `npm run build`。新增文字使用 `G.t(key, parameters)`；旧版组合文本由兼容层映射到稳定键名。存档继续保存宝可梦编号和性格标识，不保存显示译名。
+
+中日韩字体使用 Google Fonts 的 Noto Sans SC、JP、KR 开源字体子集，许可证见 `assets/fonts/NotoSans-OFL.txt`。物种和招式的多语言名称参考 PokeAPI 数据。新增中日韩文字后需要重新生成字体子集并执行 `validate_game_text` 和浏览器检查。
+
+本游戏为外部链接托管。仅更新平台译文无需重新部署；修改加载器、代码或字体时需要更新 GitHub Pages。上传译文、修改平台文案和推送代码前均需作者确认。
+
 Sprites de [SpriteCollab](https://github.com/PMDCollab/SpriteCollab) bajo
 **CC BY-NC 4.0** — uso **no comercial** y con atribución; la lista de artistas
 está en [`CREDITS.md`](CREDITS.md). Pokémon es propiedad de Nintendo, Creatures
