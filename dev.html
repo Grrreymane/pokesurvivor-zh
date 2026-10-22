@@ -94,6 +94,7 @@
         <button class="menu-item" data-go="gacha"> 宝可梦召唤 <small> 九大地区 · 宝可梦与异色 </small></button>
         <button class="menu-item" data-go="goals"> 任务 <small id="menu-goals-sub"> 任务、成就与个人资料 </small></button>
         <button class="menu-item" data-go="settings"> 设置 <small> local.controls </small></button>
+        <button class="menu-item" data-go="platform-board"><span data-i18n="platform.board">生存排行榜</span></button>
       </div>
     </div>
     <div class="box" style="padding:14px 18px">
@@ -132,6 +133,17 @@
 </section>
 
 <!-- ====== Ajustes ====== -->
+<section id="scr-platform-board" class="scr dim hidden">
+  <div class="box settings">
+    <h2 data-i18n="platform.board">生存排行榜</h2>
+    <p data-i18n="platform.boardInfo"></p>
+    <p data-i18n="platform.boardLimit"></p>
+    <p id="platform-board-status"></p><ol id="platform-board-list" style="list-style:none;padding:0;line-height:2"></ol>
+    <p id="platform-board-me"></p>
+    <button class="btn" id="platform-board-refresh" data-i18n="platform.refresh">刷新</button>
+    <button class="btn" id="platform-board-close" data-i18n="platform.close">关闭</button>
+  </div>
+</section>
 <section id="scr-settings" class="scr dim hidden">
   <div class="box settings">
     <div class="row between"><h2> 设置 </h2><button class="btn small ghost" id="set-close"> 关闭 </button></div>
@@ -409,6 +421,8 @@
 <script defer src="js/data/text-original.js"></script>
 <script defer src="js/core/i18n.js"></script>
 <script defer src="js/core/platform-i18n.js"></script>
+<script defer src="js/core/platform.js"></script>
+<script defer src="js/core/platform-board.js"></script>
 <script defer src="js/core/settings.js"></script>
 <script defer src="js/data/music.js"></script>
 <script defer src="js/data/music-files.js"></script>
@@ -475,6 +489,7 @@
 <script defer src="js/ui/mod-ui.js"></script>
 <script defer src="js/ui/goals-ui.js"></script>
 <script defer src="js/ui/settings-ui.js"></script>
+<script defer src="js/ui/platform-board-ui.js"></script>
 <script defer src="js/ui/layout-ui.js"></script>
 <script defer src="js/ui/support-ui.js"></script>
 <script defer src="js/ui/news-ui.js"></script>

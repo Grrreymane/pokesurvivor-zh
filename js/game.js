@@ -140,6 +140,7 @@ G.Game = (() => {
     deathT = 0;
 
     state = 'playing';
+    G.PlatformBoard?.start(!coop);
   }
 
   function quitRun() {
@@ -323,6 +324,7 @@ G.Game = (() => {
     const mark = { t: Math.floor(time), lv: pl.level, kills: pl.kills };
     // Si la partida se ha tocado (ver clean()), no sube al ranking (sin avisar); lo demás, sí.
     const ok = clean();
+    G.PlatformBoard?.finish(time, ok && !coop);
     const sent = ok && !coop ? G.Ranking.submitSolo(Object.assign(mark, { dex: pl.dex, shiny: pl.shiny }))
                : ok && wasHost ? G.Ranking.submitGroup(Object.assign(mark, { members: team })) : null;
     if (sent) sent.then(b => { if (b && b.some(p => p !== 'a')) G.DB.commit(true); }).catch(() => {});
@@ -886,21 +888,28 @@ G.Flow = {
     G.TestUI.init(); G.MenuUI.init(); G.GachaUI.init();
     // 单机版暂不初始化好友、邀请、房间、排行和排行管理界面。
     G.GoalsUI.init(); G.ProfileUI.init(); G.SettingsUI.init(); G.SupportUI.init(); G.NewsUI.init(); G.Updater.init();
+    G.PlatformBoardUI?.init();
     // 本地存档状态直接打开存档设置。
     document.getElementById('user-pill').onclick = () => G.SettingsUI.open('save');
     G.Audio.music('village');     // suena tras el primer clic (lo exige el navegador)
     G.Game.init();
     // 保留此前正在使用的存档；首次启动才创建快捷本地存档。
-    G.DB.ready().then(restored => {
+    G.DB.ready().then(async restored => {
       if (!restored || !G.DB.save) {
         const result = G.DB.playLocal();
         if (!result.ok && !G.DB.save) G.DB.playAsGuest();
       }
+      await G.Platform?.init();
+      G.Platform?.start();
       document.getElementById('boot').classList.add('hidden');
       this.continueLocal();
       if (!G.DB.storageOk || G.DB.guest) G.UI.toast('浏览器无法保存，本次进度仅在当前页面保留。', 6000);
     }).catch(() => {
-      document.querySelector('#boot .boot-ld').textContent = G.t("local.openFailed");
+      const label = document.querySelector('#boot .boot-ld');
+      label.textContent = G.t("local.openFailed");
+      const retry = document.createElement('button');
+      retry.className = 'btn'; retry.textContent = G.t('platform.refresh');
+      retry.onclick = () => location.reload(); label.appendChild(retry);
     });
   },
   continueLocal() {

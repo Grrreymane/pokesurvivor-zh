@@ -29,6 +29,8 @@ G.NewsUI = (() => {
       <h3>${tr('local.newsTitle')}<small>${tr('local.basedOn')}</small></h3>
       <div class="news-part"><span class="news-tag new">${tr('local.languages')}</span><ul>
         <li>${tr('local.languageInfo')}</li><li>${tr('local.musicRotation')}</li>
+        <li>${tr('platform.cloud')}: ${tr('platform.checkpoint')}</li>
+        <li>${tr('platform.board')}: ${tr('platform.boardInfo')} · ${tr('platform.boardLimit')}</li>
       </ul></div>
       <div class="news-part"><span class="news-tag chg">${tr('local.play')}</span><ul>
         <li>${tr('local.sameBrowser')}</li><li>${tr('local.saveInfo')}</li>

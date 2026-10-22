@@ -6,6 +6,14 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-21', title: ['Clasificación de supervivencia', 'Survival ranking'], new: [
+    ['Clasificación de partidas en solitario en AI Made Games: se conserva el mejor tiempo y las pausas no cuentan.',
+     'Solo survival ranking on AI Made Games: keeps your best time and excludes pauses.']
+  ] },
+  { d: '2026-10-21', title: ['Guardado en la nube', 'Cloud saves'], new: [
+    ['Continúa tu colección y mejoras desde el menú con el guardado de AI Made Games; las partidas locales se conservan.',
+     'Continue your collection and upgrades from the menu with AI Made Games cloud saves; existing device saves are preserved.']
+  ] },
   { d: '2026-10-21', title: ['Cinco idiomas', 'Five languages'], new: [
     ['Chino, inglés, japonés, coreano y español; el idioma del enlace tiene prioridad y se incluyen fuentes CJK.',
      'Chinese, English, Japanese, Korean and Spanish; the link language takes priority and CJK fonts are bundled.']

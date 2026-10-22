@@ -7,7 +7,7 @@
  */
 G.UI = (() => {
   const $ = id => document.getElementById(id);
-  const SCREENS = ['scr-test', 'scr-result', 'scr-starters', 'scr-menu',
+  const SCREENS = ['scr-test', 'scr-result', 'scr-starters', 'scr-menu', 'scr-platform-board',
                    'scr-dex', 'scr-upgrades', 'scr-gacha', 'scr-levelup', 'scr-pause', 'scr-over',
                    'scr-nick', 'scr-friends', 'scr-lobby', 'scr-rank', 'scr-item', 'scr-goals', 'scr-bond', 'scr-mod'];
 
@@ -37,6 +37,10 @@ G.UI = (() => {
     $('user-pill').innerHTML = G.Icons.html('book', 18) + `<span>${canSave ? G.t("local.save") : G.t("local.unsaved")}</span>` +
       `<i class="sync ${canSave ? 'local' : 'offline'}"></i>`;
     $('user-pill').title = canSave ? G.t("local.saveTip") : G.t("local.blocked");
+    if (G.Platform?.active) {
+      $('user-pill').innerHTML = G.Icons.html('book', 18) + `<span>${G.t('platform.cloud')}</span>`;
+      $('user-pill').title = G.t('platform.status.' + G.Platform.status.status);
+    }
   }
 
   let toastEl = null, toastT = 0;

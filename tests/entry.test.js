@@ -74,6 +74,38 @@ test('first visit enters partner setup directly and the next visit restores the 
   assert.ok(!reopened.events.some(([event, name]) => event === 'start' && name === 'TestUI'));
 });
 
+test('platform progress is isolated from legacy browser saves and exports complete checkpoints', async () => {
+  const p = page(); await p.boot(); const db = p.G.DB;
+  db.grant(25, 'starter'); db.save.partner = 25; db.save.coins = 1234; db.commit();
+  const legacy = p.storage.getItem('ps.save.__local_adventure__');
+  const archive = db.exportPlatform();
+  db.beginPlatform(); assert.equal(db.save.partner, null);
+  db.importPlatform(archive); assert.equal(db.save.coins, 1234);
+  archive.progress.coins = 1; assert.equal(db.save.coins, 1234);
+  db.save.coins = 5678; db.commit();
+  assert.equal(p.storage.getItem('ps.save.__local_adventure__'), legacy);
+  assert.equal(db.exportPlatform().checkpoint, 'menu');
+  const other = page(p.storage); await other.boot(); assert.equal(other.G.DB.save.coins, 1234);
+});
+
+test('unsupported or invalid cloud saves cannot replace current progress', async () => {
+  const p = page(); await p.boot(); const db = p.G.DB;
+  db.beginPlatform(); const original = JSON.stringify(db.save);
+  for (const mutate of [s => s.format = 2, s => s.progress.v = 999, s => s.progress.partner = 99999, s => s.progress.stats = null]) {
+    const data = db.exportPlatform(); mutate(data);
+    assert.throws(() => db.importPlatform(data), { code: 'INCOMPATIBLE_SAVE' });
+    assert.equal(JSON.stringify(db.save), original);
+  }
+});
+
+test('old compatible progress fields migrate inside a platform snapshot', async () => {
+  const p = page(); await p.boot(); const db = p.G.DB;
+  const archive = db.exportPlatform(); archive.progress.v = 1;
+  archive.progress.pity = 7; delete archive.progress.stats.groupRuns;
+  db.beginPlatform(); db.importPlatform(archive);
+  assert.equal(db.save.v, 3); assert.equal(db.save.pity[1], 7); assert.equal(db.save.stats.groupRuns, 0);
+});
+
 test('automatic entry preserves an active legacy named save without switching to the quick slot', async () => {
   const previous = page();
   const db = previous.G.DB;

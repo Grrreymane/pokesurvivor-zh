@@ -124,6 +124,20 @@ G.SettingsUI = (() => {
   }
 
   function renderSave(box) {
+    if (G.Platform?.active) {
+      box.innerHTML = section(G.t('platform.cloud'), G.t('platform.checkpoint'))
+        + `<p>${esc(G.t('platform.status.' + G.Platform.status.status))}</p>`
+        + `<p class="note">${esc(G.t('platform.manage'))}</p>`
+        + (G.Platform.canImport ? `<button class="btn" id="platform-import">${esc(G.t('platform.import'))}</button>` : '');
+      const button = box.querySelector('#platform-import');
+      if (button) button.onclick = async () => {
+        button.disabled = true;
+        try { if (await G.Platform.importLegacy()) close(); }
+        catch (_) { G.UI.toast(G.t('platform.saveError')); }
+        finally { button.disabled = false; }
+      };
+      return;
+    }
     const canSave = G.DB.storageOk && !G.DB.guest;
     box.innerHTML = section(G.t("local.save"), G.t("local.saveInfo"))
       + `<div class="set-row"><div class="grow"><b>保存位置</b><small>请固定使用同一浏览器和游戏地址。清除网站数据会清除存档。</small></div><span>当前浏览器</span></div>`

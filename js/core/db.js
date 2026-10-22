@@ -653,6 +653,26 @@ G.DB = (() => {
   // =====================================================================
 
   let readyP = null;
+  let platformState = false;
+
+  // Platform SDK owns account partitions. Never mirror these into the legacy slot.
+  function beginPlatform() {
+    platformState = true;
+    user = '训练家'; guest = false; key = '__platform_memory__';
+    save = newSave(user);
+  }
+  function exportPlatform() {
+    return { format: 1, checkpoint: 'menu', progress: JSON.parse(JSON.stringify(save)) };
+  }
+  function importPlatform(data) {
+    const invalid = () => Object.assign(new Error('INCOMPATIBLE_SAVE'), { code: 'INCOMPATIBLE_SAVE' });
+    if (!data || data.format !== 1 || data.checkpoint !== 'menu' || !isObj(data.progress)) throw invalid();
+    const s = JSON.parse(JSON.stringify(data.progress));
+    if (!Number.isInteger(s.v) || s.v > VERSION || !isObj(s.stats) || !isObj(s.owned) || !isObj(s.tickets) || !Number.isFinite(s.coins)) throw invalid();
+    if (s.partner != null && (!G.DEX_BY[s.partner] || !s.owned[s.partner])) throw invalid();
+    const next = migrate(s, s.name);
+    save = next; user = next.name;
+  }
 
   /** Arranca la base de datos y recupera la sesión anterior. → true si hay sesión. */
   function ready() {
@@ -743,6 +763,7 @@ G.DB = (() => {
     if (guest || !key || !save) return false;
     save.updated = Date.now();
     fold(save);
+    if (platformState) { G.Platform?.checkpoint(); return true; }
     if (mode === 'local') return write(K_SAVE + key, save);
     write(K_CLOUD + uid, save);
     pending = true;
@@ -838,6 +859,7 @@ G.DB = (() => {
 
   /** 中文单机版：只重置当前存档，保留槽位和其他旧存档。 */
   function resetProgress() {
+    if (platformState) return { ok: false, error: G.t('platform.manage') };
     if (mode !== 'local' || guest || !key || !save) return { ok: false, error: '当前没有可重置的本地存档。' };
     const previous = save;
     save = newSave(user);
@@ -870,6 +892,8 @@ G.DB = (() => {
   }
 
   return {
+    beginPlatform, exportPlatform, importPlatform,
+    get platformState() { return platformState; },
     ready, register, login, loginWithGoogle, playAsGuest, playLocal, logout, commit, deleteAccount, flush: pushNow,
     owns, grant, ownsShiny, grantShiny, merge, setName, upgradesOf, resetProgress,
     onSync(fn) { listeners.add(fn); },
